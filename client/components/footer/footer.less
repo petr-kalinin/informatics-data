@@ -1,0 +1,29 @@
+@import "{}/client/lib/bootstrap/custom.bootstrap.import.less";
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 55px !important;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  height: 55px;
+  width:100%;
+  .container-fluid {
+    background-color: #f5f5f5;
+    padding-top:20px;
+    @media (min-width: @grid-float-breakpoint) {
+        border-radius: @navbar-border-radius;
+    }
+  }
+  a {
+    color:lighten(@brand-primary,20%);
+  }
+}
+
+.footer.container {
+  width:100%;
+}
