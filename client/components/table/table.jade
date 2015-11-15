@@ -2,6 +2,11 @@ template(name='table')
     h1
         | Сводная таблица
     table
+        tr
+            td
+                | &nbsp;
+            +each contests
+                +contestHeader
         +each users
             +tableRow
 
