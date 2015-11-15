@@ -1,0 +1,7 @@
+template(name='tableRow')
+    tr
+        td
+            =name
+        +each contests
+            +userInContest user=.. contest=this
+
