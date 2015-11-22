@@ -3,6 +3,7 @@ UsersCollection = new Mongo.Collection 'users'
 # fields
 #   _id
 #   name
+#   userList
 
 #UsersCollection.helpers
 #    canRemove: ->
@@ -15,6 +16,9 @@ Users =
         
     findAll: ->
         @collection.find {}
+        
+    findByList: (list) ->
+        @collection.find {userList: list}
             
     collection: UsersCollection
 

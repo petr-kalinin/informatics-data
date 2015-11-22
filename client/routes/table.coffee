@@ -1,4 +1,4 @@
-Router.route '/table/:id', name: 'table'
+Router.route '/table/:userList/:tableId', name: 'table'
 class @TableController extends ControllerWithTitle
     waitOn: ->
         @subscribe 'users'
@@ -7,8 +7,12 @@ class @TableController extends ControllerWithTitle
         @subscribe 'tables'
         
     data: ->
-        id = this.params.id
-        Tables.findById id
+        tableId = this.params.tableId
+        userList = this.params.userList
+        res = 
+            table: Tables.findById tableId
+            users: Users.findByList userList
+        res
     
     name: ->
         'users'

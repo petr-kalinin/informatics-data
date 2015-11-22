@@ -1,9 +1,9 @@
 Template.table.helpers
     users: ->
-        Users.findAll()
+        @users
         
     contests: ->
-        @getContests()
+        @table.getContests()
         
     colspan: ->
         this.problems.length
