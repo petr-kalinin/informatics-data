@@ -18,9 +18,9 @@ Submits =
         
     findByUserAndProblem: (user, problem) ->
         @collection.find({user: user, problem: problem})
-
-    displayProblemResult: (user, problem) ->
-        submits = @collection.find({user: user, problem: problem})
+        
+    problemResult: (user, problem) ->
+        submits = @findByUserAndProblem user, problem
         attempts = 0
         success = 0
         submits.forEach (submit) ->
@@ -28,10 +28,15 @@ Submits =
                 success = 1
             else if success == 0
                 attempts++
-        if success
-            result = '+' + (if attempts>0 then attempts else "")
-        else if attempts > 0
-            result = '-' + attempts
+        {success: success, attempts: attempts}
+
+    displayProblemResult: (user, problem) ->
+        res = @problemResult(user, problem)
+        result = ""
+        if res.success
+            result = '+' + (if res.attempts>0 then res.attempts else "")
+        else if res.attempts > 0
+            result = '-' + res.attempts
         else result = '.'
         result
 
