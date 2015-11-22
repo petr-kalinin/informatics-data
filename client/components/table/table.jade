@@ -1,12 +1,22 @@
 template(name='table')
     h1
         | Сводная таблица
-    table
+    table.mainTable
         tr
             td
                 | &nbsp;
             +each contests
+                td
+                    &nbsp;
+                td(colspan="{{colspan}}")
+                    =name
+        tr
+            td
+                | &nbsp;
+            +each contests
+                td
+                    &nbsp;
                 +contestHeader
         +each users
-            +tableRow
+            +tableRow table=.. user=this
 

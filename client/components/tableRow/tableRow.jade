@@ -1,7 +1,9 @@
 template(name='tableRow')
     tr
         td
-            =name
+            =user.name
         +each contests
-            +userInContest user=.. contest=this
+            td
+                | &nbsp;
+            +userInContest user=../user contest=this
 

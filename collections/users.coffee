@@ -1,7 +1,7 @@
 UsersCollection = new Mongo.Collection 'users'
 
 # fields
-#   id
+#   _id
 #   name
 
 #UsersCollection.helpers

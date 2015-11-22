@@ -1,7 +1,7 @@
 SubmitsCollection = new Mongo.Collection 'submits'
 
 # fields
-#   id
+#   _id
 #   time
 #   user
 #   problem

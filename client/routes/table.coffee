@@ -1,12 +1,14 @@
-Router.route '/table/', name: 'table'
+Router.route '/table/:id', name: 'table'
 class @TableController extends ControllerWithTitle
     waitOn: ->
         @subscribe 'users'
         @subscribe 'submits'
         @subscribe 'contests'
+        @subscribe 'tables'
         
     data: ->
-        Users.findAll
+        id = this.params.id
+        Tables.findById id
     
     name: ->
         'users'

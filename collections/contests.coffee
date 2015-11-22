@@ -1,7 +1,7 @@
 ContestsCollection = new Mongo.Collection 'contests'
 
 # fields
-#   id
+#   _id
 #   problem[]
 
 #SubmitsCollection.helpers

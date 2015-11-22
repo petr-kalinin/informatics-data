@@ -3,4 +3,7 @@ Template.table.helpers
         Users.findAll()
         
     contests: ->
-        Contests.findAll()
+        @getContests()
+        
+    colspan: ->
+        this.problems.length
