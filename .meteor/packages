@@ -27,3 +27,5 @@ nemo64:bootstrap
 momentjs:moment
 sacha:spin
 dburles:collection-helpers
+percolate:synced-cron
+http
