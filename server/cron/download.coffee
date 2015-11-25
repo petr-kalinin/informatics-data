@@ -7,7 +7,8 @@ class BasicDownloader
     # Заоч
     #tableBaseUrl = 'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3644&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=%d&action=getHTMLTable'
     
-    AC = 'Зачтено/Принято'
+    AC: 'Зачтено/Принято'
+    IG: 'Проигнорировано'
 
     readUrl: (url) ->
         console.log 'Retrieving ', url
@@ -18,7 +19,13 @@ class BasicDownloader
         return fut.wait();
 
     processSubmit: (uid, name, pid, runid, prob, date, outcome, childrenResults) ->
-        console.log uid, name, pid, runid, prob, date, outcome
+        if (outcome == @AC) 
+            outcome = "AC"
+        if (outcome == @IG) 
+            outcome = "IG"
+        console.log uid, name, pid, runid, prob, date, "'"+outcome+"'"
+        Submits.addSubmit(runid, date, uid, pid, outcome)
+        Users.addUser(uid, name, "lic40")
     
 #    if date > endDate:  # we do not need this, but continue search
 #        return True
@@ -37,7 +44,6 @@ class BasicDownloader
         submitsRows = submitsTable.split("<tr>")
         result = false
         for row in submitsRows
-            console.log row
             re = new RegExp '<td>[^<]*</td>\\s*<td><a href="/moodle/user/view.php\\?id=(\\d+)">([^<]*)</a></td>\\s*<td><a href="/moodle/mod/statements/view3.php\\?chapterid=(\\d+)&run_id=([0-9r]+)">([^<]*)</a></td>\\s*<td>([^<]*)</td>\\s*<td>[^<]*</td>\\s*<td>([^<]*)</td>', 'gm'
             data = re.exec row
             if not data
@@ -52,7 +58,6 @@ class BasicDownloader
             outcome = data[7].trim()
             resultSubmit = @processSubmit(uid, name, pid, runid, prob, date, outcome, childrenResults)
             result = result or resultSubmit
-            break
         return result
     
     run: ->

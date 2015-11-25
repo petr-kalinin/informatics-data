@@ -23,22 +23,38 @@ Submits =
         submits = @findByUserAndProblem user, problem
         attempts = 0
         success = 0
+        accepted = 0
         submits.forEach (submit) ->
+            if submit.outcome == "IG"
+                accepted = -1
+                success = -1
             if submit.outcome == "AC"
+                success = 1
+                accepted = 1
+            else if submit.outcome == "OK"
                 success = 1
             else if success == 0
                 attempts++
-        {success: success, attempts: attempts}
+        {success: success, attempts: attempts, accepted: accepted}
 
     displayProblemResult: (user, problem) ->
         res = @problemResult(user, problem)
         result = ""
-        if res.success
+        if res.success > 0
             result = '+' + (if res.attempts>0 then res.attempts else "")
         else if res.attempts > 0
             result = '-' + res.attempts
         else result = '.'
-        result
+        res["text"] = result
+        res
+        
+    addSubmit: (id, time, user, problem, outcome) ->
+        @collection.update({_id: id}, {_id: id, time: time, user: user, problem: problem, outcome: outcome}, {upsert: true})
+#   _id
+#   time
+#   user
+#   problem
+#   outcome
 
         
     findAll: ->

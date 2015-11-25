@@ -19,6 +19,9 @@ Users =
         
     findByList: (list) ->
         @collection.find {userList: list}
+        
+    addUser: (id, name, userList) ->
+        @collection.update({_id: id}, {_id: id, name: name, userList: userList}, {upsert: true})
             
     collection: UsersCollection
 
