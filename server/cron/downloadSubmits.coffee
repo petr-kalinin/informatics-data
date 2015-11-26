@@ -1,6 +1,6 @@
 Future = Npm.require('fibers/future');
 
-class BasicDownloader
+class BasicSubmitDownloader
     # Лицей 40
     baseUrl: (page) ->
         'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3696&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=' + page + '&action=getHTMLTable'
@@ -61,7 +61,6 @@ class BasicDownloader
         return result
     
     run: ->
-        console.log "BasicDownloader.run()"
         childrenResults = {}
         page = 0
         while true
@@ -75,12 +74,12 @@ class BasicDownloader
             page = page + 1
     
     
-SyncedCron.add
-    name: 'loadTable',
-    schedule: (parser) ->
-        return parser.text('every 10 seconds');
-#        return parser.text('every 5 minutes');
-    job: -> 
-        (new BasicDownloader()).run()
+#SyncedCron.add
+#    name: 'loadTable',
+#    schedule: (parser) ->
+#        return parser.text('every 10 seconds');
+##        return parser.text('every 5 minutes');
+#    job: -> 
+#        (new BasicSubmitDownloader()).run()
 
 SyncedCron.start()
