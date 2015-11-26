@@ -10,14 +10,6 @@ class BasicSubmitDownloader
     AC: 'Зачтено/Принято'
     IG: 'Проигнорировано'
 
-    readUrl: (url) ->
-        console.log 'Retrieving ', url
-        fut = new Future();
-        request = HTTP.get url, (error, response) ->
-            console.log 'Done'
-            fut.return response
-        return fut.wait();
-
     processSubmit: (uid, name, pid, runid, prob, date, outcome, childrenResults) ->
         if (outcome == @AC) 
             outcome = "AC"
@@ -65,7 +57,7 @@ class BasicSubmitDownloader
         page = 0
         while true
             submitsUrl = @baseUrl(page)
-            submits = @readUrl(submitsUrl)
+            submits = syncDownload(submitsUrl)
             submits = submits["data"]["result"]["text"]
             result = @parseSubmits(submits, childrenResults)
             break

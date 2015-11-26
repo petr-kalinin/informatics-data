@@ -28,4 +28,4 @@ momentjs:moment
 sacha:spin
 dburles:collection-helpers
 percolate:synced-cron
-http
+dandv:http-more
