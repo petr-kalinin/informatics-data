@@ -17,7 +17,7 @@ Submits =
         @collection.findOne _id: id
         
     findByUserAndProblem: (user, problem) ->
-        @collection.find({user: user, problem: problem})
+        @collection.find({user: user, problem: problem._id}, {sort: {time: 1}})
         
     problemResult: (user, problem) ->
         submits = @findByUserAndProblem user, problem
@@ -28,7 +28,7 @@ Submits =
             if submit.outcome == "IG"
                 accepted = -1
                 success = -1
-            if submit.outcome == "AC"
+            else if submit.outcome == "AC"
                 success = 1
                 accepted = 1
             else if submit.outcome == "OK"
@@ -63,3 +63,7 @@ Submits =
     collection: SubmitsCollection
             
 @Submits = Submits
+
+if Meteor.isServer
+    Meteor.startup ->
+        Submits.collection._ensureIndex({ "problem": 1, "user" : 1, time: 1});

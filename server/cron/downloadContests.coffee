@@ -5,14 +5,16 @@ class ContestDownloader
     baseUrl: 'http://informatics.mccme.ru/mod/statements/'
         
     makeProblem: (fullText, href, pid, letter, name) ->
-        console.log pid, letter, name
         {
             _id: pid
             letter: letter
             name: name
         }
         
-    processContest: (fullText, href, name, level) ->
+    addContest: (cid, name, level, problems) ->
+        Contests.addContest(cid, name, level, problems)
+        
+    processContest: (fullText, href, cid, name, level) ->
         text = syncDownload(href).content
         console.log href, name, level, @url
         re = new RegExp '<a href="(view3.php\\?id=\\d+&amp;chapterid=(\\d+))"><B>Задача ([^.]+)\\.</B> ([^<]+)</a>'
@@ -27,21 +29,21 @@ class ContestDownloader
             console.log "res: ", res
             problems.push(@makeProblem(res, a, b, c, d))
         problems.splice(1, 0, secondProb);
-        console.log problems
+        @addContest(cid, name, level, problems)
         
     run: ->
         text = syncDownload(@url).content
-        re = new RegExp '<a title="Условия задач"\\s*href="([^"]*)">(([^:]*): [^<]*)</a>', 'gm'
-        text.replace re, (a,b,c,d) => @processContest(a,b,c,d)
+        re = new RegExp '<a title="Условия задач"\\s*href="(http://informatics.mccme.ru/mod/statements/view.php\\?id=(\\d+))">(([^:]*): [^<]*)</a>', 'gm'
+        text.replace re, (a,b,c,d,e) => @processContest(a,b,c,d,e)
         
     
     
-SyncedCron.add
-    name: 'downloadContests',
-    schedule: (parser) ->
-        return parser.text('every 10 seconds');
-#        return parser.text('every 5 minutes');
-    job: -> 
-        (new ContestDownloader()).run()
+#SyncedCron.add
+#    name: 'downloadContests',
+#    schedule: (parser) ->
+#        return parser.text('every 10 seconds');
+##        return parser.text('every 5 minutes');
+#    job: -> 
+#        (new ContestDownloader()).run()
 
 

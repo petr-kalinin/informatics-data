@@ -5,6 +5,7 @@ class @TableController extends ControllerWithTitle
         @subscribe 'submits'
         @subscribe 'contests'
         @subscribe 'tables'
+        @subscribe 'results'
         
     data: ->
         tableId = this.params.tableId

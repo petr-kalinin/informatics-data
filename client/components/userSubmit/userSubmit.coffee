@@ -1,11 +1,11 @@
 Template.userSubmit.helpers
     outcome: ->
-        res = Submits.displayProblemResult(this.user._id, this.problem)
+        console.log this.problem.letter
+        res = Results.display(this.user._id, this.problem)
         res.text
         
     class: ->
-        res = Submits.displayProblemResult(this.user._id, this.problem)
-        console.log res
+        res = Results.display(this.user._id, this.problem)
         if res.accepted == 1
             "ac"
         else if res.accepted == -1

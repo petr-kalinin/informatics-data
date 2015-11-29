@@ -2,11 +2,16 @@ TablesCollection = new Mongo.Collection 'tables'
 
 # fields
 #   _id
-#   contests[]
+#   levels[]
 
 TablesCollection.helpers
     getContests: ->
-        Contests.findById(c) for c in @contests
+        res = []
+        for lev in @levels
+            cont = Contests.findByLevel(lev).fetch() 
+            for c in cont
+                res.push(c)
+        res
         
 Tables =
     findById: (id) ->

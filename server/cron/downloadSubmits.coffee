@@ -18,6 +18,7 @@ class BasicSubmitDownloader
         console.log uid, name, pid, runid, prob, date, "'"+outcome+"'"
         Submits.addSubmit(runid, date, uid, pid, outcome)
         Users.addUser(uid, name, "lic40")
+        true
     
 #    if date > endDate:  # we do not need this, but continue search
 #        return True
@@ -40,7 +41,6 @@ class BasicSubmitDownloader
             data = re.exec row
             if not data
                 continue
-            console.log "data"
             uid = data[1]
             name = data[2]
             pid = data[3]
@@ -60,10 +60,20 @@ class BasicSubmitDownloader
             submits = syncDownload(submitsUrl)
             submits = submits["data"]["result"]["text"]
             result = @parseSubmits(submits, childrenResults)
-            break
-            #if not result:
-            #    break
+            if not result
+                break
             page = page + 1
+            
+updateResults = ->
+    for user in Users.findAll().fetch()
+        for contest in Contests.findAll().fetch()
+            if not contest.problems
+                continue
+            for problem in contest.problems
+                if not problem.name
+                    continue
+                console.log "Updating result", user.name, problem.name
+                Results.addResult(user._id, problem._id, Submits.problemResult(user._id, problem))
     
     
 #SyncedCron.add
@@ -75,3 +85,8 @@ class BasicSubmitDownloader
 #        (new BasicSubmitDownloader()).run()
 
 SyncedCron.start()
+#Meteor.startup ->
+#    (new BasicSubmitDownloader()).run()
+
+#Meteor.startup ->
+#    updateResults()
