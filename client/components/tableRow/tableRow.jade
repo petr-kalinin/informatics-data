@@ -5,5 +5,9 @@ template(name='tableRow')
         +each contests
             td
                 | &nbsp;
-            +userInContest user=../user contest=this
+            +userInContest row=../row contest=this
+        td
+            =solved
+        td
+            =attempts
 

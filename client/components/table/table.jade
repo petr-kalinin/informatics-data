@@ -10,6 +10,10 @@ template(name='table')
                     | &nbsp;
                 td(colspan="{{colspan}}")
                     =name
+            td(rowspan="2")
+                | =
+            td(rowspan="2")
+                | Попыток
         tr
             td
                 | &nbsp;
@@ -17,6 +21,6 @@ template(name='table')
                 td
                     | &nbsp;
                 +contestHeader
-        +each users
-            +tableRow table=../table user=this
+        +each row
+            +tableRow row=this table=..
 

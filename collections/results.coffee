@@ -12,7 +12,12 @@ Results =
         @collection.findOne _id: id
         
     findByUserAndProblem: (user, problem) ->
-        @collection.findOne({_id: user + "::" + problem._id}).result
+        res = @collection.findOne({_id: user + "::" + problem._id})?.result
+        if not res
+            res =
+                success: 0
+                attempts: 0
+        res
         
     display: (user, problem) ->
         res = @findByUserAndProblem(user, problem)

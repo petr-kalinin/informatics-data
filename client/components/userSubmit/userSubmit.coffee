@@ -1,18 +1,16 @@
 Template.userSubmit.helpers
     outcome: ->
-        console.log this.problem.letter
-        res = Results.display(this.user._id, this.problem)
-        res.text
+        @row.outcomes[@problem._id].text
         
     class: ->
-        res = Results.display(this.user._id, this.problem)
-        if res.accepted == 1
+        data = @row.outcomes[@problem._id]
+        if data.accepted == 1
             "ac"
-        else if res.accepted == -1
+        else if data.accepted == -1
             "ig"
-        else if res.success == 1
+        else if data.success == 1
             "ok"
-        else if res.attempts > 0
+        else if data.attempts > 0
             "wa"
         else
             undefined

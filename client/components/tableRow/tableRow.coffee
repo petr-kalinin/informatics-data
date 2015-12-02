@@ -1,8 +1,14 @@
 Template.tableRow.helpers
     contests: ->
-        console.log @user.name
-        @table.getContests()
+        @table.table.getContests()
         
     name: ->
-        console.log @user.name
-        @user.name
+        user = Users.findById(@row.user)
+        console.log user.name
+        user.name
+
+    solved: ->
+        @row.solved
+        
+    attempts: ->
+        @row.attempts

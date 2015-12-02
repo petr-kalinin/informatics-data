@@ -1,6 +1,7 @@
 Template.table.helpers
-    users: ->
-        @users
+    row: ->
+        res = Session.get('table')
+        res
         
     contests: ->
         @table.getContests()
