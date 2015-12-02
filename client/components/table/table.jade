@@ -6,10 +6,10 @@ template(name='table')
             td
                 | &nbsp;
             +each contests
-                td
-                    | &nbsp;
+                td.border
                 td(colspan="{{colspan}}")
                     =name
+            td.border
             td(rowspan="2")
                 | =
             td(rowspan="2")
@@ -18,8 +18,7 @@ template(name='table')
             td
                 | &nbsp;
             +each contests
-                td
-                    | &nbsp;
+                td.border
                 +contestHeader
         +each row
             +tableRow row=this table=..

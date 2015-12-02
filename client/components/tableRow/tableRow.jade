@@ -3,9 +3,9 @@ template(name='tableRow')
         td
             =name
         +each contests
-            td
-                | &nbsp;
+            td.border
             +userInContest row=../row contest=this
+        td.border
         td
             =solved
         td
