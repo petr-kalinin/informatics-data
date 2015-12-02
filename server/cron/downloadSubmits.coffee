@@ -1,6 +1,6 @@
 Future = Npm.require('fibers/future');
 
-class BasicSubmitDownloader
+class AllSubmitDownloader
     # Лицей 40
     baseUrl: (page) ->
         'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3696&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=' + page + '&action=getHTMLTable'
@@ -9,8 +9,12 @@ class BasicSubmitDownloader
     
     AC: 'Зачтено/Принято'
     IG: 'Проигнорировано'
+        
+    needContinueFromSubmit: (runid) ->
+        true
 
     processSubmit: (uid, name, pid, runid, prob, date, outcome, childrenResults) ->
+        res = @needContinueFromSubmit(runid)
         if (outcome == @AC) 
             outcome = "AC"
         if (outcome == @IG) 
@@ -18,7 +22,7 @@ class BasicSubmitDownloader
         console.log uid, name, pid, runid, prob, date, "'"+outcome+"'"
         Submits.addSubmit(runid, date, uid, pid, outcome)
         Users.addUser(uid, name, "lic40")
-        true
+        res
     
 #    if date > endDate:  # we do not need this, but continue search
 #        return True
@@ -35,7 +39,7 @@ class BasicSubmitDownloader
 
     parseSubmits: (submitsTable, childrenResults) ->
         submitsRows = submitsTable.split("<tr>")
-        result = false
+        result = true
         for row in submitsRows
             re = new RegExp '<td>[^<]*</td>\\s*<td><a href="/moodle/user/view.php\\?id=(\\d+)">([^<]*)</a></td>\\s*<td><a href="/moodle/mod/statements/view3.php\\?chapterid=(\\d+)&run_id=([0-9r]+)">([^<]*)</a></td>\\s*<td>([^<]*)</td>\\s*<td>[^<]*</td>\\s*<td>([^<]*)</td>', 'gm'
             data = re.exec row
@@ -49,7 +53,7 @@ class BasicSubmitDownloader
             date = data[6]
             outcome = data[7].trim()
             resultSubmit = @processSubmit(uid, name, pid, runid, prob, date, outcome, childrenResults)
-            result = result or resultSubmit
+            result = result and resultSubmit
         return result
     
     run: ->
@@ -63,6 +67,18 @@ class BasicSubmitDownloader
             if not result
                 break
             page = page + 1
+        updateResults()
+            
+class LastSubmitDownloader extends AllSubmitDownloader
+    needContinueFromSubmit: (runid) ->
+        !Submits.findById(runid)
+
+class UntilIgnoredSubmitDownloader extends AllSubmitDownloader
+    needContinueFromSubmit: (runid) ->
+        res = Submits.findById(runid)?.outcome
+        r = !((res == "AC") || (res == "IG"))
+        return r
+            
             
 updateResults = ->
     for user in Users.findAll().fetch()
@@ -76,13 +92,13 @@ updateResults = ->
                 Results.addResult(user._id, problem._id, Submits.problemResult(user._id, problem))
     
     
-#SyncedCron.add
-#    name: 'loadTable',
-#    schedule: (parser) ->
-#        return parser.text('every 10 seconds');
-##        return parser.text('every 5 minutes');
-#    job: -> 
-#        (new BasicSubmitDownloader()).run()
+SyncedCron.add
+    name: 'loadTable',
+    schedule: (parser) ->
+        return parser.text('every 10 seconds');
+#        return parser.text('every 5 minutes');
+    job: -> 
+        (new UntilIgnoredSubmitDownloader()).run()
 
 SyncedCron.start()
 #Meteor.startup ->
