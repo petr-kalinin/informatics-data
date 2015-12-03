@@ -40,6 +40,7 @@ class AllSubmitDownloader
     parseSubmits: (submitsTable, childrenResults) ->
         submitsRows = submitsTable.split("<tr>")
         result = true
+        wasSubmit = false
         for row in submitsRows
             re = new RegExp '<td>[^<]*</td>\\s*<td><a href="/moodle/user/view.php\\?id=(\\d+)">([^<]*)</a></td>\\s*<td><a href="/moodle/mod/statements/view3.php\\?chapterid=(\\d+)&run_id=([0-9r]+)">([^<]*)</a></td>\\s*<td>([^<]*)</td>\\s*<td>[^<]*</td>\\s*<td>([^<]*)</td>', 'gm'
             data = re.exec row
@@ -54,7 +55,8 @@ class AllSubmitDownloader
             outcome = data[7].trim()
             resultSubmit = @processSubmit(uid, name, pid, runid, prob, date, outcome, childrenResults)
             result = result and resultSubmit
-        return result
+            wasSubmit = true
+        return result and wasSubmit
     
     run: ->
         childrenResults = {}
@@ -81,6 +83,7 @@ class UntilIgnoredSubmitDownloader extends AllSubmitDownloader
             
             
 updateResults = ->
+    console.log "Updating result"
     for user in Users.findAll().fetch()
         for contest in Contests.findAll().fetch()
             if not contest.problems
@@ -88,17 +91,32 @@ updateResults = ->
             for problem in contest.problems
                 if not problem.name
                     continue
-                console.log "Updating result", user.name, problem.name
                 Results.addResult(user._id, problem._id, Submits.problemResult(user._id, problem))
     
     
 SyncedCron.add
-    name: 'loadTable',
+    name: 'loadTable-1',
     schedule: (parser) ->
-        return parser.text('every 10 seconds');
-#        return parser.text('every 5 minutes');
+#        return parser.text('every 10 seconds');
+        return parser.text('every 5 minutes');
     job: -> 
         (new UntilIgnoredSubmitDownloader()).run()
+
+SyncedCron.add
+    name: 'loadTable-2',
+    schedule: (parser) ->
+#        return parser.text('every 10 seconds');
+        return parser.text('every 1 minutes');
+    job: -> 
+        (new LastSubmitDownloader()).run()
+
+SyncedCron.add
+    name: 'loadTable-3',
+    schedule: (parser) ->
+#        return parser.text('every 10 seconds');
+        return parser.text('at 0:00');
+    job: -> 
+        (new AllSubmitDownloader()).run()
 
 SyncedCron.start()
 #Meteor.startup ->

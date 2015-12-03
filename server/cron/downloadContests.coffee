@@ -47,3 +47,5 @@ class ContestDownloader
 #        (new ContestDownloader()).run()
 
 
+#Meteor.startup ->
+#    (new ContestDownloader()).run()

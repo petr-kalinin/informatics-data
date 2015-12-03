@@ -26,4 +26,6 @@ Meteor.methods
             return a.attempts - b.attempts
         return res
             
-                    
+    date: ->
+        console.log (new Date()).toString()
+        return (new Date()).toString()
