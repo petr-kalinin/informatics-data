@@ -1,13 +1,19 @@
 template(name='table')
     h1
-        | Сводная таблица
+        | Сводная таблица по уровням
+        =levelsText
+    | Цвета:
+    span.ac.example Зачтено/Принято
+    span.ig.example Проигнорировано
+    span.ok.example OK
+    span.wa.example Частичное решение и т.п.
     table.mainTable
         tr
             td
                 | &nbsp;
             +each contests
                 td.border
-                td(colspan="{{colspan}}")
+                td.head(colspan="{{colspan}}")
                     =name
             td.border
             td(rowspan="2")

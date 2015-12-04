@@ -8,3 +8,6 @@ Template.table.helpers
         
     colspan: ->
         this.problems.length
+        
+    levelsText: ->
+        @table.levels.join(", ")
