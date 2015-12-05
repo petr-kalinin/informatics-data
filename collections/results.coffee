@@ -5,7 +5,7 @@ ResultsCollection = new Mongo.Collection 'results'
 #   user
 #   problem
 #   result
-#      success, attempts, accepted
+#      success, attempts, accepted, submitId
 
 Results =
     findById: (id) ->

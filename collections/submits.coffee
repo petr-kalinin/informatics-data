@@ -24,7 +24,11 @@ Submits =
         attempts = 0
         success = 0
         accepted = 0
+        lastId = undefined
         submits.forEach (submit) ->
+            if accepted <= 0
+                lastId = submit._id
+            # the following code is NOT in else
             if submit.outcome == "IG"
                 accepted = -1
                 success = -1
@@ -33,9 +37,10 @@ Submits =
                 accepted = 1
             else if submit.outcome == "OK"
                 success = 1
-            else if success == 0
+                accepted = 0
+            else if accepted <= 0
                 attempts++
-        {success: success, attempts: attempts, accepted: accepted}
+        {success: success, attempts: attempts, accepted: accepted, submitId: lastId}
 
     displayProblemResult: (user, problem) ->
         res = @problemResult(user, problem)
