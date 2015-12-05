@@ -2,11 +2,14 @@ template(name='table')
     h1
         | Сводная таблица по уровням
         =levelsText
-    | Цвета:
-    span.ac.example Зачтено/Принято
-    span.ig.example Проигнорировано
-    span.ok.example OK
-    span.wa.example Частичное решение и т.п.
+    p
+        | Цвета:
+        span.ac.example Зачтено/Принято
+        span.ig.example Проигнорировано
+        span.ok.example OK
+        span.wa.example Частичное решение и т.п.
+    p
+        | Наведите курсор на ячейку таблицы, чтобы узнать название задачи
     table.mainTable
         tr
             td

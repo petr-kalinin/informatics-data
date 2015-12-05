@@ -1,6 +1,9 @@
 Template.userSubmit.helpers
     outcome: ->
         @row.outcomes[@problem._id].text
+
+    title: ->
+        @problem.name
         
     class: ->
         data = @row.outcomes[@problem._id]
