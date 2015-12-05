@@ -12,9 +12,9 @@ Meteor.methods
                 for prob in c.problems
                     thisRes = Results.display(user._id, prob)
                     outcomes[prob._id] = thisRes
-                    attempts += thisRes.attempts
                     if thisRes.success > 0
                         solved++
+                        attempts += thisRes.attempts
             res.push
                 user: user._id
                 outcomes: outcomes
