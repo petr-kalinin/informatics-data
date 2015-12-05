@@ -1,11 +1,8 @@
 Future = Npm.require('fibers/future');
 
 class AllSubmitDownloader
-    # Лицей 40
-    baseUrl: (page) ->
-        'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3696&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=' + page + '&action=getHTMLTable'
-    # Заоч
-    #tableBaseUrl = 'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3644&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=%d&action=getHTMLTable'
+    
+    constructor: (@baseUrl, @userList, @limitPages) ->
     
     AC: 'Зачтено/Принято'
     IG: 'Проигнорировано'
@@ -21,7 +18,7 @@ class AllSubmitDownloader
             outcome = "IG"
         console.log uid, name, pid, runid, prob, date, "'"+outcome+"'"
         Submits.addSubmit(runid, date, uid, pid, outcome)
-        Users.addUser(uid, name, "lic40")
+        Users.addUser(uid, name, @userList)
         res
     
 #    if date > endDate:  # we do not need this, but continue search
@@ -69,7 +66,8 @@ class AllSubmitDownloader
             if not result
                 break
             page = page + 1
-        updateResults()
+            if page > @limitPages
+                break
             
 class LastSubmitDownloader extends AllSubmitDownloader
     needContinueFromSubmit: (runid) ->
@@ -93,6 +91,14 @@ updateResults = ->
                     continue
                 Results.addResult(user._id, problem._id, Submits.problemResult(user._id, problem))
     
+
+    # Лицей 40
+lic40url = (page) ->
+        'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3696&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=' + page + '&action=getHTMLTable'
+    # Заоч
+zaochUrl = (page) ->
+    'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3644&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=' + page + '&action=getHTMLTable'
+
     
 SyncedCron.add
     name: 'loadTable-1',
@@ -100,7 +106,9 @@ SyncedCron.add
 #        return parser.text('every 10 seconds');
         return parser.text('every 5 minutes');
     job: -> 
-        (new UntilIgnoredSubmitDownloader()).run()
+        (new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 30)).run()
+        (new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 30)).run()
+        updateResults()
 
 SyncedCron.add
     name: 'loadTable-2',
@@ -108,7 +116,9 @@ SyncedCron.add
 #        return parser.text('every 10 seconds');
         return parser.text('every 1 minutes');
     job: -> 
-        (new LastSubmitDownloader()).run()
+        (new LastSubmitDownloader(lic40url, 'lic40', 3)).run()
+        (new LastSubmitDownloader(zaochUrl, 'zaoch', 3)).run()
+        updateResults()
 
 SyncedCron.add
     name: 'loadTable-3',
@@ -116,7 +126,9 @@ SyncedCron.add
 #        return parser.text('every 10 seconds');
         return parser.text('at 0:00');
     job: -> 
-        (new AllSubmitDownloader()).run()
+        (new AllSubmitDownloader(lic40url, 'lic40', 1e9)).run()
+        (new AllSubmitDownloader(zaochUrl, 'zaoch', 1e9)).run()
+        updateResults()
 
 SyncedCron.start()
 #Meteor.startup ->
