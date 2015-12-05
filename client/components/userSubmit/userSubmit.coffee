@@ -3,7 +3,8 @@ Template.userSubmit.helpers
         @row.outcomes[@problem._id].text
 
     title: ->
-        @problem.name
+        user = Users.findById(@row.user)
+        user.name + ": " + @problem.name
         
     class: ->
         data = @row.outcomes[@problem._id]
