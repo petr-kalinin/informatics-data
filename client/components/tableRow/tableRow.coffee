@@ -12,3 +12,13 @@ Template.tableRow.helpers
         
     attempts: ->
         @row.attempts
+        
+    active: ->
+        if Session.get("activeUser") == @row.user
+            "active"
+        else
+            ""
+            
+Template.tableRow.events
+    'click .userName': (e,t) ->
+        Session.set("activeUser", t.data.row.user)

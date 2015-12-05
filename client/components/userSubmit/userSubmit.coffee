@@ -19,6 +19,13 @@ Template.userSubmit.helpers
         else
             undefined
             
+    active: ->
+        if Session.get("activeUser") == @row.user
+            "active"
+        else
+            ""
+
+            
 Template.userSubmit.events
     'dblclick .res': (e,t) ->
         runId = t.data.row.outcomes[t.data.problem._id].submitId
