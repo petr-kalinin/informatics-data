@@ -21,5 +21,9 @@ Template.userSubmit.helpers
             
 Template.userSubmit.events
     'dblclick .res': (e,t) ->
-        url = 'http://informatics.mccme.ru/moodle/mod/statements/view3.php?chapterid=' + t.data.problem._id + '&run_id=' + t.data.row.outcomes[t.data.problem._id].submitId
+        runId = t.data.row.outcomes[t.data.problem._id].submitId
+        runSuff = ''
+        if runId
+            runSuff = '&run_id=' + runId
+        url = 'http://informatics.mccme.ru/moodle/mod/statements/view3.php?chapterid=' + t.data.problem._id + runSuff
         window.open(url, '_blank')
