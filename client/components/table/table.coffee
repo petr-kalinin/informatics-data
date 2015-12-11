@@ -1,8 +1,4 @@
 Template.table.helpers
-    row: ->
-        res = Session.get('table')
-        res
-        
     contests: ->
         @table.getContests()
         

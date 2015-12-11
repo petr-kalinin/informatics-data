@@ -3,39 +3,59 @@ ResultsCollection = new Mongo.Collection 'results'
 # fields
 #   _id
 #   user
-#   problem
-#   result
-#      success, attempts, accepted, submitId
+#   userList
+#   table
+#   contests
+#     problems
+#       problem: success, attempts, accepted, submitId, text
+#     solved
+#     attempts
+#   solved
+#   attempts
 
 Results =
     findById: (id) ->
         @collection.findOne _id: id
         
-    findByUserAndProblem: (user, problem) ->
-        res = @collection.findOne({_id: user + "::" + problem._id})?.result
-        if not res
-            res =
-                success: 0
-                attempts: 0
-        res
-        
-    display: (user, problem) ->
-        res = @findByUserAndProblem(user, problem)
-        result = ""
-        if res.success > 0
-            result = '+' + (if res.attempts>0 then res.attempts else "")
-        else if res.attempts > 0
-            result = '-' + res.attempts
-        else result = '.'
-        res["text"] = result
-        res
-        
-    addResult: (user, problem, result) ->
-        id = user + "::" + problem
-        @collection.update({_id: id}, {_id: id, user: user, problem: problem, result: result}, {upsert: true})
+    updateResults: (user, table) ->
+        solved = 0
+        attempts = 0
+        data =
+            _id: user._id + "::" + table._id
+            user: user._id
+            userList: user.userList
+            table: table._id
+            contests: {}
+        contests = table.getContests()
+        for c in contests
+            thisData = 
+                problems: {}
+            thisSolved = 0
+            thisAttempts = 0
+            for prob in c.problems
+                thisRes = Submits.displayProblemResult(user._id, prob)
+                thisData.problems[prob._id] = thisRes
+                if thisRes.success > 0
+                    thisSolved++
+                    thisAttempts += thisRes.attempts
+            thisData.solved = thisSolved
+            thisData.attempts = thisAttempts
+            solved += thisSolved
+            attempts += thisAttempts
+            data.contests[c._id] = thisData
+        data.solved = solved
+        data.attempts = attempts
+        @collection.update({_id: data._id}, data, {upsert: true})
         
     findAll: ->
         @collection.find {}
+    
+    findByUserListAndTable: (userList, table) ->
+        @collection.find {
+            userList: userList, 
+            table: table
+        }, sort: { solved: -1, attempts: 1}
+            
         
     collection: ResultsCollection
             
@@ -43,4 +63,8 @@ Results =
 
 if Meteor.isServer
     Meteor.startup ->
-        Submits.collection._ensureIndex({ "problem": 1, "user" : 1, time: 1});
+        Results.collection._ensureIndex
+            userList: 1
+            table : 1 
+            solved: -1
+            attempts: 1

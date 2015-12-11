@@ -32,7 +32,9 @@ template(name='table')
                 | &nbsp;
             +each contests
                 td.border
-                +contestHeader
-        +each row
-            +tableRow row=this table=..
+                +each problems
+                    td.head(title="{{name}}")
+                        =this.letter
+        +each results
+            +tableRow result=this table=../table
 

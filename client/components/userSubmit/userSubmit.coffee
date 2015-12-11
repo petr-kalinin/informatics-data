@@ -1,13 +1,13 @@
 Template.userSubmit.helpers
-    outcome: ->
-        @row.outcomes[@problem._id].text
+    text: ->
+        @result.contests[@contest._id].problems[@problem._id].text
 
     title: ->
-        user = Users.findById(@row.user)
+        user = Users.findById(@result.user)
         user.name + ": " + @problem.name
         
     class: ->
-        data = @row.outcomes[@problem._id]
+        data = @result.contests[@contest._id].problems[@problem._id]
         if data.accepted == 1
             "ac"
         else if data.accepted == -1
@@ -20,7 +20,7 @@ Template.userSubmit.helpers
             undefined
             
     active: ->
-        if Session.get("activeUser") == @row.user
+        if Session.get("activeUser") == @result.user
             "active"
         else
             ""
@@ -28,7 +28,7 @@ Template.userSubmit.helpers
             
 Template.userSubmit.events
     'dblclick .res': (e,t) ->
-        runId = t.data.row.outcomes[t.data.problem._id].submitId
+        runId = t.data.result.contests[@contest._id].problems[@problem._id].submitId
         runSuff = ''
         if runId
             runSuff = '&run_id=' + runId

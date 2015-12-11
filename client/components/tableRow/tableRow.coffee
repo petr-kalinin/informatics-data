@@ -1,24 +1,23 @@
 Template.tableRow.helpers
-    contests: ->
-        @table.table.getContests()
-        
     name: ->
-        user = Users.findById(@row.user)
-        console.log user.name
+        user = Users.findById(@result.user)
         user.name
 
-    solved: ->
-        @row.solved
-        
-    attempts: ->
-        @row.attempts
-        
     active: ->
-        if Session.get("activeUser") == @row.user
+        if Session.get("activeUser") == @result.user
             "active"
         else
             ""
-            
+
+    contests: ->
+        @table.getContests()
+        
+    solved: ->
+        @result.solved
+        
+    attempts: ->
+        @result.attempts
+        
 Template.tableRow.events
     'click .userName': (e,t) ->
-        Session.set("activeUser", t.data.row.user)
+        Session.set("activeUser", t.data.result.user)

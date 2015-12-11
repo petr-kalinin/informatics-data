@@ -4,7 +4,8 @@ template(name='tableRow')
             =name
         +each contests
             td.border
-            +userInContest row=../row contest=this
+            +each problems
+                +userSubmit result=../../result contest=.. problem=this
         td.border
         td
             =solved
