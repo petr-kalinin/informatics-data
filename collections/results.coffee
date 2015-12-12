@@ -28,6 +28,7 @@ Results =
             table: table._id
             contests: {}
         contests = table.getContests()
+        wasAttempts = false
         for c in contests
             thisData = 
                 problems: {}
@@ -39,6 +40,8 @@ Results =
                 if thisRes.success > 0
                     thisSolved++
                     thisAttempts += thisRes.attempts
+                if (thisRes.success > 0) or (thisRes.attempts > 0)
+                    wasAttempts = true
             thisData.solved = thisSolved
             thisData.attempts = thisAttempts
             solved += thisSolved
@@ -46,7 +49,8 @@ Results =
             data.contests[c._id] = thisData
         data.solved = solved
         data.attempts = attempts
-        @collection.update({_id: data._id}, data, {upsert: true})
+        if (wasAttempts)
+            @collection.update({_id: data._id}, data, {upsert: true})
         
     findAll: ->
         @collection.find {}

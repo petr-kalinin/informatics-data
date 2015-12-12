@@ -119,8 +119,8 @@ SyncedCron.start()
 
 Meteor.startup ->
     Results.collection.remove {}
-#    tables = Tables.findAll().fetch()
-#    users = Users.findAll().fetch()
-#    for user in users
-#        for t in tables
-#            Results.updateResults(user, t)
+    tables = Tables.findAll().fetch()
+    users = Users.findAll().fetch()
+    for user in users
+        for t in tables
+            Results.updateResults(user, t)
