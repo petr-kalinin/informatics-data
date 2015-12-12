@@ -97,7 +97,7 @@ SyncedCron.add
     schedule: (parser) ->
 #        return parser.text('every 10 seconds');
         return parser.text('every 5 minutes');
-    job: -> 
+   job: -> 
         (new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 30)).run()
         (new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 30)).run()
 
@@ -117,10 +117,10 @@ SyncedCron.start()
     #(new LastSubmitDownloader(lic40url, 'lic40', 3)).run()
 #    (new BasicSubmitDownloader()).run()
 
-Meteor.startup ->
-    Results.collection.remove {}
-    tables = Tables.findAll().fetch()
-    users = Users.findAll().fetch()
-    for user in users
-        for t in tables
-            Results.updateResults(user, t)
+#Meteor.startup ->
+#    Results.collection.remove {}
+#    tables = Tables.findAll().fetch()
+#    users = Users.findAll().fetch()
+#    for user in users
+#        for t in tables
+#            Results.updateResults(user, t)
