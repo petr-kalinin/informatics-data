@@ -18,6 +18,7 @@ Results =
         @collection.findOne _id: id
         
     updateResults: (user, table) ->
+        console.log "Updating results for ", user.name, table._id
         solved = 0
         attempts = 0
         data =

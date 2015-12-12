@@ -7,7 +7,7 @@ class AllSubmitDownloader
     AC: 'Зачтено/Принято'
     IG: 'Проигнорировано'
         
-    userList: {}
+    addedUsers: {}
         
     needContinueFromSubmit: (runid) ->
         true
@@ -21,7 +21,8 @@ class AllSubmitDownloader
         console.log uid, name, pid, runid, prob, date, "'"+outcome+"'"
         Submits.addSubmit(runid, date, uid, pid, outcome)
         Users.addUser(uid, name, @userList)
-        @userList[uid] = uid
+        @addedUsers[uid] = uid
+        console.log @addedUsers
         res
     
     parseSubmits: (submitsTable, childrenResults) ->
@@ -59,7 +60,8 @@ class AllSubmitDownloader
             if page > @limitPages
                 break
         tables = Tables.findAll().fetch()
-        for uid in userList
+        console.log "final", @addedUsers
+        for uid,tmp of @addedUsers
             for t in tables
                 Results.updateResults(Users.findById(uid), t)
             
@@ -81,35 +83,32 @@ zaochUrl = (page) ->
     'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3644&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=' + page + '&action=getHTMLTable'
 
     
-#SyncedCron.add
-#    name: 'loadTable-1',
-#    schedule: (parser) ->
-##        return parser.text('every 10 seconds');
-#        return parser.text('every 5 minutes');
-#    job: -> 
-#        #(new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 30)).run()
-#        #(new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 30)).run()
-#        #updateResults()
+SyncedCron.add
+    name: 'loadTable-1',
+    schedule: (parser) ->
+#        return parser.text('every 10 seconds');
+        return parser.text('every 1 minutes');
+    job: -> 
+        (new LastSubmitDownloader(lic40url, 'lic40', 3)).run()
+        (new LastSubmitDownloader(zaochUrl, 'zaoch', 3)).run()
 
-#SyncedCron.add
-#    name: 'loadTable-2',
-#    schedule: (parser) ->
-##        return parser.text('every 10 seconds');
-#        return parser.text('every 1 minutes');
-#    job: -> 
-#        #(new LastSubmitDownloader(lic40url, 'lic40', 3)).run()
-#        #(new LastSubmitDownloader(zaochUrl, 'zaoch', 3)).run()
-#        #updateResults()
+SyncedCron.add
+    name: 'loadTable-2',
+    schedule: (parser) ->
+#        return parser.text('every 10 seconds');
+        return parser.text('every 5 minutes');
+    job: -> 
+        (new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 30)).run()
+        (new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 30)).run()
 
-#SyncedCron.add
-#    name: 'loadTable-3',
-#    schedule: (parser) ->
-##        return parser.text('every 10 seconds');
-#        return parser.text('at 0:00');
-#    job: -> 
-#        #(new AllSubmitDownloader(lic40url, 'lic40', 1e9)).run()
-#        #(new AllSubmitDownloader(zaochUrl, 'zaoch', 1e9)).run()
-#        #updateResults()
+SyncedCron.add
+    name: 'loadTable-3',
+    schedule: (parser) ->
+#        return parser.text('every 10 seconds');
+        return parser.text('at 0:00');
+    job: -> 
+        (new AllSubmitDownloader(lic40url, 'lic40', 1e9)).run()
+        (new AllSubmitDownloader(zaochUrl, 'zaoch', 1e9)).run()
 
 SyncedCron.start()
 
@@ -118,7 +117,8 @@ SyncedCron.start()
     #(new LastSubmitDownloader(lic40url, 'lic40', 3)).run()
 #    (new BasicSubmitDownloader()).run()
 
-#Meteor.startup ->
+Meteor.startup ->
+    Results.collection.remove {}
 #    tables = Tables.findAll().fetch()
 #    users = Users.findAll().fetch()
 #    for user in users
