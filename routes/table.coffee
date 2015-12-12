@@ -3,10 +3,10 @@ class @TableController extends ControllerWithTitle
     waitOn: ->
         tableId = this.params.tableId
         userList = this.params.userList
-        @subscribe 'users'
-        @subscribe 'contests'
-        @subscribe 'tables'
-        @subscribe 'resultsForUserListTable', userList, tableId
+        Meteor.subscribe 'users'
+        Meteor.subscribe 'contests'
+        Meteor.subscribe 'tables'
+        Meteor.subscribe 'resultsForUserListTable', userList, tableId
         
     data: ->
         tableId = this.params.tableId

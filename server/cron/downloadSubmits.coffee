@@ -118,9 +118,9 @@ SyncedCron.start()
     #(new LastSubmitDownloader(lic40url, 'lic40', 3)).run()
 #    (new BasicSubmitDownloader()).run()
 
-Meteor.startup ->
-    tables = Tables.findAll().fetch()
-    users = Users.findAll().fetch()
-    for user in users
-        for t in tables
-            Results.updateResults(user, t)
+#Meteor.startup ->
+#    tables = Tables.findAll().fetch()
+#    users = Users.findAll().fetch()
+#    for user in users
+#        for t in tables
+#            Results.updateResults(user, t)

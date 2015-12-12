@@ -1,4 +1,4 @@
-UsersCollection = new Mongo.Collection 'users'
+UsersCollection = new Mongo.Collection 'tableUsers'
 
 # fields
 #   _id

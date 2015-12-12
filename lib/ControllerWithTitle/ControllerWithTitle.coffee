@@ -7,3 +7,5 @@ class @ControllerWithTitle extends RouteController
         if !thisTitle
             thisTitle = "Сводные таблицы"
 #        SEO.set title: thisTitle
+
+    fastRender: true
