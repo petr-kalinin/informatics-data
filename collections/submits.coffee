@@ -37,7 +37,7 @@ Submits =
                 else if submit.outcome == "OK"
                     success = 1
                     accepted = 0
-                else 
+                else
                     attempts++
         {success: success, attempts: attempts, accepted: accepted, submitId: lastId}
 

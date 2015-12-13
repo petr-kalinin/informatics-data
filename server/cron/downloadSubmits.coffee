@@ -97,7 +97,7 @@ SyncedCron.add
     schedule: (parser) ->
 #        return parser.text('every 10 seconds');
         return parser.text('every 5 minutes');
-   job: -> 
+    job: -> 
         (new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 30)).run()
         (new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 30)).run()
 
