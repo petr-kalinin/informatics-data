@@ -26,11 +26,12 @@ Template.tableRow.helpers
     attempts: ->
         @result.attempts
         
+    levelTitle: ->
+        "Итого по уровню " + @level
+        
     solvedInLevel: ->
         res = 0
-        console.log @level
         for c in Contests.findByLevel(@level).fetch()
-            console.log c._id, @result.contests[c._id].solved  
             res = res + @result.contests[c._id].solved 
         res
         
@@ -38,6 +39,12 @@ Template.tableRow.helpers
         res = 0
         for c in Contests.findByLevel(@level).fetch()
             res = res + @result.contests[c._id].attempts 
+        res
+
+    totalInLevel: ->
+        res = 0
+        for c in Contests.findByLevel(@level).fetch()
+            res = res + c.problems.length
         res
 
         

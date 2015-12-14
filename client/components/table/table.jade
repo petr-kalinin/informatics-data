@@ -18,10 +18,14 @@ template(name='table')
         tr
             td.topLeft
                 | &nbsp;
-            +each contests
+            +each levels
+                +each contests
+                    td.border
+                    td.head(colspan="{{colspan}}")
+                        =name
                 td.border
-                td.head(colspan="{{colspan}}")
-                    =name
+                td(rowspan="2", title="{{levelTitle}}")
+                    | =
             td.border
             td(rowspan="2")
                 | =
@@ -30,11 +34,13 @@ template(name='table')
         tr
             td
                 | &nbsp;
-            +each contests
+            +each levels
+                +each contests
+                    td.border
+                    +each problems
+                        td.head(title="{{name}}")
+                            =this.letter
                 td.border
-                +each problems
-                    td.head(title="{{name}}")
-                        =this.letter
         +each results
             +tableRow result=this table=../table
 

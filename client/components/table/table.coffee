@@ -1,12 +1,19 @@
 Template.table.helpers
     contests: ->
-        @table.getContests()
+        Contests.findByLevel("" + this)
         
     colspan: ->
         this.problems.length
         
     levelsText: ->
         @table.levels.join(", ")
+        
+    levels: ->
+        @table.levels
+
+    levelTitle: ->
+        "Итого по уровню " + this
+        
 
 Template.table.events
     'click .topLeft': (e,t) ->
