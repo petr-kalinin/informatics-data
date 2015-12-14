@@ -2,10 +2,16 @@ template(name='tableRow')
     tr
         td(class="userName {{active}}")
             =name
-        +each contests
+        +each levels
+            +each contests
+                td.border
+                +each problems
+                    +userSubmit result=../../../result contest=.. problem=this
             td.border
-            +each problems
-                +userSubmit result=../../result contest=.. problem=this
+            td
+                =solvedInLevel
+            td
+                =attemptsInLevel
         td.border
         td
             =solved
