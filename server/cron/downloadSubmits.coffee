@@ -3,6 +3,7 @@ Future = Npm.require('fibers/future');
 class AllSubmitDownloader
     
     constructor: (@baseUrl, @userList, @limitPages) ->
+        @addedUsers = {}
     
     AC: 'Зачтено/Принято'
     IG: 'Проигнорировано'
@@ -18,11 +19,9 @@ class AllSubmitDownloader
             outcome = "AC"
         if (outcome == @IG) 
             outcome = "IG"
-        console.log uid, name, pid, runid, prob, date, "'"+outcome+"'"
         Submits.addSubmit(runid, date, uid, pid, outcome)
         Users.addUser(uid, name, @userList)
         @addedUsers[uid] = uid
-        console.log @addedUsers
         res
     
     parseSubmits: (submitsTable, childrenResults) ->
@@ -47,6 +46,7 @@ class AllSubmitDownloader
         return result and wasSubmit
     
     run: ->
+        console.log "AllSubmitDownloader::run ", @userList, @limitPages
         childrenResults = {}
         page = 0
         while true
@@ -60,10 +60,10 @@ class AllSubmitDownloader
             if page > @limitPages
                 break
         tables = Tables.findAll().fetch()
-        console.log "final", @addedUsers
         for uid,tmp of @addedUsers
             for t in tables
                 Results.updateResults(Users.findById(uid), t)
+        console.log "Finish AllSubmitDownloader::run ", @userList, @limitPages
             
 class LastSubmitDownloader extends AllSubmitDownloader
     needContinueFromSubmit: (runid) ->
@@ -113,9 +113,8 @@ SyncedCron.add
 SyncedCron.start()
 
 #Meteor.startup ->
-    #(new AllSubmitDownloader(lic40url, 'lic40', 1e9)).run()
-    #(new LastSubmitDownloader(lic40url, 'lic40', 3)).run()
-#    (new BasicSubmitDownloader()).run()
+#    (new AllSubmitDownloader(lic40url, 'lic40', 1e9)).run()
+#    (new AllSubmitDownloader(zaochUrl, 'zaoch', 1e9)).run()
 
 #Meteor.startup ->
 #    Results.collection.remove {}
