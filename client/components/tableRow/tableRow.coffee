@@ -19,7 +19,7 @@ Template.tableRow.helpers
                 level: lev
                 result: @result
         res
-        
+
     solved: ->
         @result.solved
         

@@ -1,14 +1,31 @@
+@ac: #44ff44;
+@ok: #ffff00;
+@wa: #ff4444;
+@ig: #aaaaff;
+
 .ac {
-    background: #44ff44;
+    background: @ac;
+}
+.ac.inactive {
+    background: rgb(luma(@ac), luma(@ac), luma(@ac));
 }
 .ok {
-    background: #ffff00;
+    background: @ok;
+}
+.ok.inactive {
+    background: rgb(luma(@ok), luma(@ok), luma(@ok));
 }
 .wa {
-    background: #ff4444;
+    background: @wa;
+}
+.wa.inactive {
+    background: rgb(luma(@wa), luma(@wa), luma(@wa));
 }
 .ig {
-    background: #aaaaff;
+    background: @ig;
+}
+.ig.inactive {
+    background: rgb(luma(@ig), luma(@ig), luma(@ig));
 }
 
 td.res {
@@ -21,6 +38,6 @@ td.res {
     border-bottom:3px solid black;
 }
 
-td.res.active {
+td.active {
     font-weight: bold;
 }

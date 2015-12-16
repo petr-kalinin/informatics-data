@@ -25,6 +25,11 @@ Template.userSubmit.helpers
         else
             ""
 
+    inactive: ->
+        if (Session.get("activeUser") and (Session.get("activeUser") != @result.user))
+            "inactive"
+        else
+            ""
             
 Template.userSubmit.events
     'dblclick .res': (e,t) ->

@@ -8,13 +8,13 @@ template(name='tableRow')
                 +each problems
                     +userSubmit result=../../../result contest=.. problem=this
             td.border
-            td(title="{{levelTitle}}")
+            td(title="{{levelTitle}}", class="{{active}}")
                 =solvedInLevel
                 | &nbsp;/&nbsp;
                 =totalInLevel
         td.border
-        td
+        td(class="{{active}}")
             =solved
-        td
+        td(class="{{active}}")
             =attempts
 
