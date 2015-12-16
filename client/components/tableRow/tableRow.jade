@@ -9,12 +9,12 @@ template(name='tableRow')
                     +userSubmit result=../../../result contest=.. problem=this
             td.border
             td(title="{{levelTitle}}", class="{{active}}")
-                =solvedInLevel
+                =solvedAndOkInLevel
                 | &nbsp;/&nbsp;
                 =totalInLevel
         td.border
         td(class="{{active}}")
-            =solved
+            =solvedAndOk
         td(class="{{active}}")
             =attempts
 

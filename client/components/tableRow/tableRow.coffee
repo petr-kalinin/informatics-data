@@ -20,19 +20,27 @@ Template.tableRow.helpers
                 result: @result
         res
 
-    solved: ->
-        @result.solved
-        
+    solvedAndOk: ->
+        @result.solved + (if @result.ok>0 then "+" + @result.ok else "")
+
     attempts: ->
         @result.attempts
         
     levelTitle: ->
         "Итого по уровню " + @level
         
-    solvedInLevel: ->
+    solvedAndOkInLevel: ->
+        s = 0
+        ok = 0
+        for c in Contests.findByLevel(@level).fetch()
+            s = s + @result.contests[c._id].solved 
+            ok = ok + @result.contests[c._id].ok
+        s + (if ok > 0 then "+" + ok else "")
+        
+    okInLevel: ->
         res = 0
         for c in Contests.findByLevel(@level).fetch()
-            res = res + @result.contests[c._id].solved 
+            res = res + @result.contests[c._id].ok
         res
         
     attemptsInLevel: ->

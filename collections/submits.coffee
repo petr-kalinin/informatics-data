@@ -26,7 +26,7 @@ Submits =
         accepted = 0
         lastId = undefined
         submits.forEach (submit) ->
-            if accepted <= 0
+            if (accepted <= 0) && (success <= 0)
                 lastId = submit._id
                 if submit.outcome == "IG"
                     accepted = -1

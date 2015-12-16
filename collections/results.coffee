@@ -9,8 +9,10 @@ ResultsCollection = new Mongo.Collection 'results'
 #     problems
 #       problem: success, attempts, accepted, submitId, text
 #     solved
+#     ok
 #     attempts
 #   solved
+#   ok 
 #   attempts
 
 Results =
@@ -20,6 +22,7 @@ Results =
     updateResults: (user, table) ->
         console.log "Updating results for ", user.name, table._id
         solved = 0
+        ok = 0
         attempts = 0
         data =
             _id: user._id + "::" + table._id
@@ -33,21 +36,28 @@ Results =
             thisData = 
                 problems: {}
             thisSolved = 0
+            thisOk = 0
             thisAttempts = 0
             for prob in c.problems
                 thisRes = Submits.displayProblemResult(user._id, prob)
                 thisData.problems[prob._id] = thisRes
-                if thisRes.success > 0
+                if thisRes.accepted > 0
                     thisSolved++
+                    thisAttempts += thisRes.attempts
+                if (thisRes.accepted == 0) && (thisRes.success > 0)
+                    thisOk++
                     thisAttempts += thisRes.attempts
                 if (thisRes.success > 0) or (thisRes.attempts > 0)
                     wasAttempts = true
             thisData.solved = thisSolved
+            thisData.ok = thisOk
             thisData.attempts = thisAttempts
             solved += thisSolved
+            ok += thisOk
             attempts += thisAttempts
             data.contests[c._id] = thisData
         data.solved = solved
+        data.ok = ok
         data.attempts = attempts
         if (wasAttempts)
             @collection.update({_id: data._id}, data, {upsert: true})
