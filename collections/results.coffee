@@ -47,7 +47,7 @@ Results =
                 if (thisRes.accepted == 0) && (thisRes.success > 0)
                     thisOk++
                     thisAttempts += thisRes.attempts
-                if (thisRes.success > 0) or (thisRes.attempts > 0)
+                if (thisRes.success > 0) or (thisRes.attempts > 0) or (thisRes.accepted == Submits.DQconst)
                     wasAttempts = true
             thisData.solved = thisSolved
             thisData.ok = thisOk

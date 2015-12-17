@@ -2,11 +2,12 @@ Future = Npm.require('fibers/future');
 
 class AllSubmitDownloader
     
-    constructor: (@baseUrl, @userList, @limitPages) ->
+    constructor: (@baseUrl, @userList, @minPage, @limitPages) ->
         @addedUsers = {}
     
     AC: 'Зачтено/Принято'
     IG: 'Проигнорировано'
+    DQ: 'Дисквалифицировано'
         
     addedUsers: {}
         
@@ -19,6 +20,8 @@ class AllSubmitDownloader
             outcome = "AC"
         if (outcome == @IG) 
             outcome = "IG"
+        if (outcome == @DQ) 
+            outcome = "DQ"
         Submits.addSubmit(runid, date, uid, pid, outcome)
         Users.addUser(uid, name, @userList)
         @addedUsers[uid] = uid
@@ -54,6 +57,8 @@ class AllSubmitDownloader
             submits = syncDownload(submitsUrl)
             submits = submits["data"]["result"]["text"]
             result = @parseSubmits(submits, childrenResults)
+            if (page < @minPage) # always load at least minPage pages
+                result = true
             if not result
                 break
             page = page + 1
@@ -89,8 +94,8 @@ SyncedCron.add
 #        return parser.text('every 10 seconds');
         return parser.text('every 1 minutes');
     job: -> 
-        (new LastSubmitDownloader(lic40url, 'lic40', 3)).run()
-        (new LastSubmitDownloader(zaochUrl, 'zaoch', 3)).run()
+        (new LastSubmitDownloader(lic40url, 'lic40', 1, 1)).run()
+        (new LastSubmitDownloader(zaochUrl, 'zaoch', 1, 1)).run()
 
 SyncedCron.add
     name: 'loadTable-2',
@@ -98,8 +103,8 @@ SyncedCron.add
 #        return parser.text('every 10 seconds');
         return parser.text('every 5 minutes');
     job: -> 
-        (new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 30)).run()
-        (new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 30)).run()
+        (new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 2, 30)).run()
+        (new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 2, 30)).run()
 
 SyncedCron.add
     name: 'loadTable-3',
@@ -107,13 +112,14 @@ SyncedCron.add
 #        return parser.text('every 10 seconds');
         return parser.text('at 0:00');
     job: -> 
-        (new AllSubmitDownloader(lic40url, 'lic40', 1e9)).run()
-        (new AllSubmitDownloader(zaochUrl, 'zaoch', 1e9)).run()
+        (new AllSubmitDownloader(lic40url, 'lic40', 1, 1e9)).run()
+        (new AllSubmitDownloader(zaochUrl, 'zaoch', 1, 1e9)).run()
 
 SyncedCron.start()
 
-#Meteor.startup ->
-#    (new AllSubmitDownloader(lic40url, 'lic40', 1e9)).run()
+Meteor.startup ->
+#    console.log Submits.problemResult("208403", {_id: "1430"})
+#    (new AllSubmitDownloader(lic40url, 'lic40', 1, 4)).run()
 #    (new AllSubmitDownloader(zaochUrl, 'zaoch', 1e9)).run()
 
 #Meteor.startup ->

@@ -1,6 +1,10 @@
 Template.userSubmit.helpers
     text: ->
-        @result.contests[@contest._id].problems[@problem._id].text
+        data = @result.contests[@contest._id].problems[@problem._id]
+        if data.accepted == Submits.DQconst
+            ""
+        else 
+            data.text
 
     title: ->
         user = Users.findById(@result.user)
@@ -14,6 +18,8 @@ Template.userSubmit.helpers
             "ig"
         else if data.success == 1
             "ok"
+        else if data.accepted == Submits.DQconst
+            "dq"
         else if data.attempts > 0
             "wa"
         else

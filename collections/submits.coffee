@@ -19,14 +19,20 @@ Submits =
     findByUserAndProblem: (user, problem) ->
         @collection.find({user: user, problem: problem._id}, {sort: {time: 1}})
         
+    DQconst: -10
+        
     problemResult: (user, problem) ->
         submits = @findByUserAndProblem user, problem
         attempts = 0
         success = 0
         accepted = 0
         lastId = undefined
-        submits.forEach (submit) ->
-            if (accepted <= 0) && (success <= 0)
+        submits.forEach (submit) =>
+            #console.log submit
+            if (submit.outcome == "DQ")
+                accepted = @DQconst
+                success = @DQconst
+            if (accepted <= 0) && (success <= 0) && (accepted != @DQconst)
                 lastId = submit._id
                 if submit.outcome == "IG"
                     accepted = -1
