@@ -71,6 +71,11 @@ Results =
             table: table
         }, sort: { solved: -1, attempts: 1}
             
+    findByUser: (userId) ->
+        @collection.find {
+            user: userId, 
+        }
+
         
     collection: ResultsCollection
             
@@ -83,3 +88,6 @@ if Meteor.isServer
             table : 1 
             solved: -1
             attempts: 1
+
+        Results.collection._ensureIndex
+            user: 1

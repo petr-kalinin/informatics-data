@@ -36,7 +36,31 @@ class ContestDownloader
         re = new RegExp '<a title="Условия задач"\\s*href="(http://informatics.mccme.ru/mod/statements/view.php\\?id=(\\d+))">(([^:]*): [^<]*)</a>', 'gm'
         text.replace re, (a,b,c,d,e) => @processContest(a,b,c,d,e)
         
+class RegionContestDownloader extends ContestDownloader
+    contests: 
+        '2009': ['894', '895']
+        '2010': ['1540', '1541']
+        '2011': ['2748', '2780']
+        '2012': ['4345', '4361']
+        '2013': ['6667', '6670']
+        '2014': ['10372', '10376']
+        '2015': ['14482', '14483']
     
+    contestBaseUrl: 'http://informatics.mccme.ru/mod/statements/view.php?id='
+        
+    run: ->
+        levels = []
+        for year, cont of @contests
+            console.log "Downloading contests of ", year, cont
+            fullText = ' тур региональной олимпиады ' + year + ' года'
+            @processContest('', @contestBaseUrl + cont[0], cont[0], 'Первый' + fullText, 'reg' + year)
+            @processContest('', @contestBaseUrl + cont[1], cont[1], 'Второй' + fullText, 'reg' + year)
+            levels.push('reg' + year)
+        Tables.addTable("reg", levels)
+        table = Tables.findById("reg")
+        users = Users.findAll().fetch()
+        for user in users
+            Results.updateResults(user, table)
     
 #SyncedCron.add
 #    name: 'downloadContests',
@@ -48,8 +72,8 @@ class ContestDownloader
 
 
 Meteor.startup ->
-#    (new ContestDownloader()).run()
-#    Tables.collection.insert({_id: "1a", levels: ["1А", "1Б"]})
+#    (new RegionContestDownloader()).run()
+#    Tables.collection.insert({_id: "reg", levels: ["1А", "1Б"]})
 #    Tables.collection.insert({_id: "1c", levels: ["1В", "1Г"]})
 #    Tables.collection.insert({_id: "2", levels: ["2А", "2Б", "2В"]})
 #    Tables.collection.insert({_id: "3", levels: ["3А", "3Б", "3В"]})

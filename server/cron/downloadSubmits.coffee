@@ -68,6 +68,8 @@ class AllSubmitDownloader
         for uid,tmp of @addedUsers
             for t in tables
                 Results.updateResults(Users.findById(uid), t)
+        for uid,tmp of @addedUsers
+            Users.findById(uid).updateChocos()
         console.log "Finish AllSubmitDownloader::run ", @userList, @limitPages
             
 class LastSubmitDownloader extends AllSubmitDownloader
@@ -115,9 +117,11 @@ SyncedCron.add
         (new AllSubmitDownloader(lic40url, 'lic40', 1, 1e9)).run()
         (new AllSubmitDownloader(zaochUrl, 'zaoch', 1, 1e9)).run()
 
-SyncedCron.start()
+#SyncedCron.start()
 
 Meteor.startup ->
+    for u in Users.findAll().fetch()
+        u.updateChocos()
 #    console.log Submits.problemResult("208403", {_id: "1430"})
 #    (new AllSubmitDownloader(lic40url, 'lic40', 1, 4)).run()
 #    (new AllSubmitDownloader(zaochUrl, 'zaoch', 1e9)).run()

@@ -20,6 +20,9 @@ Tables =
     findAll: ->
         @collection.find {}
         
+    addTable: (id, levels) ->
+        @collection.update({_id: id}, {_id: id, levels: levels}, {upsert: true})
+        
     collection: TablesCollection
             
 @Tables = Tables
