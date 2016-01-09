@@ -1,0 +1,14 @@
+template(name='chocos')
+    tr
+        td.chocos
+            if number
+                +each chocosSet
+                    img(src="/choco.png")
+            else
+                img(src="/choco-strut.png")
+        td
+            span.badge
+                =number
+                
+                    
+    

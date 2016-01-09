@@ -1,7 +1,8 @@
 template(name='tableRow')
     tr
         td(class="userName {{active}}")
-            =name
+            a(href="/user/{{userId}}")
+                =name
         +each levels
             +each contests
                 td.border

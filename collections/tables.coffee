@@ -18,7 +18,7 @@ Tables =
         @collection.findOne _id: id
         
     findAll: ->
-        @collection.find {}
+        @collection.find({}, {sort: {_id: 1}})
         
     addTable: (id, levels) ->
         @collection.update({_id: id}, {_id: id, levels: levels}, {upsert: true})

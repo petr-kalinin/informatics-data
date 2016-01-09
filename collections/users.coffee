@@ -4,7 +4,7 @@ UsersCollection = new Mongo.Collection 'tableUsers'
 #   _id
 #   name    
 #   userList
-#   choco
+#   chocos
 
 class FullContestChocoCalculator
     constructor: ->

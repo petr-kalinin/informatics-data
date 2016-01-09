@@ -6,7 +6,7 @@
   "type":                 true,
   "code":                 false,
   "grid":                 true,
-  "tables":               false,
+  "tables":               true,
   "forms":                false,
   "buttons":              true,
 

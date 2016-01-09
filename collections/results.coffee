@@ -76,6 +76,11 @@ Results =
             user: userId, 
         }
 
+    findByUserAndTable: (userId, tableId) ->
+        @collection.find {
+            user: userId, 
+            table: tableId
+        }
         
     collection: ResultsCollection
             
@@ -91,3 +96,4 @@ if Meteor.isServer
 
         Results.collection._ensureIndex
             user: 1
+            table: 1

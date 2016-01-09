@@ -1,5 +1,5 @@
-Router.route '/table/:userList/:tableId', name: 'table'
-class @TableController extends ControllerWithTitle
+Router.route '/table/:userList/:tableId', name: 'tablePage'
+class @TablePageController extends ControllerWithTitle
     waitOn: ->
         tableId = this.params.tableId
         userList = this.params.userList

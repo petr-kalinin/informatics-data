@@ -15,6 +15,6 @@ Template.table.helpers
         "Итого по уровню " + this
         
 
-Template.table.events
-    'click .topLeft': (e,t) ->
-        Session.set("activeUser", undefined)
+#Template.table.events
+#    'click .topLeft': (e,t) ->
+#        Session.set("activeUser", undefined)

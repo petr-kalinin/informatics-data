@@ -3,6 +3,9 @@ Template.tableRow.helpers
         user = Users.findById(@result.user)
         user.name
         
+    userId: ->
+        @result.user
+        
     active: ->
         if Session.get("activeUser") == @result.user
             "active"
@@ -57,8 +60,8 @@ Template.tableRow.helpers
 
         
 Template.tableRow.events
-    'click .userName': (e,t) ->
-        Session.set("activeUser", t.data.result.user)
+#    'click .userName': (e,t) ->
+#        Session.set("activeUser", t.data.result.user)
         
     'dblclick .userName': (e,t) ->
         url = "http://informatics.mccme.ru/moodle/user/view.php?id=" + t.data.result.user
