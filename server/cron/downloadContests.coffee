@@ -3,6 +3,9 @@ Future = Npm.require('fibers/future');
 class ContestDownloader
     url: 'http://informatics.mccme.ru/course/view.php?id=1135'
     baseUrl: 'http://informatics.mccme.ru/mod/statements/'
+
+    constructor: ->
+        @order = 0
         
     makeProblem: (fullText, href, pid, letter, name) ->
         {
@@ -12,7 +15,8 @@ class ContestDownloader
         }
         
     addContest: (cid, name, level, problems) ->
-        Contests.addContest(cid, name, level, problems)
+        @order++
+        Contests.addContest(cid, name, @order, level, problems)
         
     processContest: (fullText, href, cid, name, level) ->
         text = syncDownload(href).content
@@ -72,7 +76,8 @@ class RegionContestDownloader extends ContestDownloader
 
 
 Meteor.startup ->
-#    (new RegionContestDownloader()).run()
+    (new RegionContestDownloader()).run()
+    (new ContestDownloader()).run()
 #    Tables.collection.insert({_id: "reg", levels: ["1А", "1Б"]})
 #    Tables.collection.insert({_id: "1c", levels: ["1В", "1Г"]})
 #    Tables.collection.insert({_id: "2", levels: ["2А", "2Б", "2В"]})

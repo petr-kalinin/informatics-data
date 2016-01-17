@@ -4,6 +4,7 @@ ContestsCollection = new Mongo.Collection 'contests'
 #   _id
 #   problems[]
 #   name
+#   order
 #   level
 
 #SubmitsCollection.helpers
@@ -16,14 +17,19 @@ Contests =
         @collection.findOne _id: id
 
     findByLevel: (level) ->
-        @collection.find level: level
-        
+        @collection.find({level: level}, {sort: {order: 1}})
+
     findAll: ->
         @collection.find {}
         
-    addContest: (id, name, level, problems) ->
-        @collection.update({_id: id}, {_id: id, name: name, level: level, problems: problems}, {upsert: true})
+    addContest: (id, name, order, level, problems) ->
+        @collection.update({_id: id}, {_id: id, name: name, order: order, level: level, problems: problems}, {upsert: true})
         
     collection: ContestsCollection
             
 @Contests = Contests
+
+if Meteor.isServer
+    Meteor.startup ->
+        Contests.collection._ensureIndex
+            order: 1
