@@ -19,6 +19,9 @@ Submits =
     findByUserAndProblem: (user, problem) ->
         @collection.find({user: user, problem: problem._id}, {sort: {time: 1}})
         
+    findByUser: (user) ->
+        @collection.find({user: user}, {sort: {time: 1}})
+        
     DQconst: -10
         
     problemResult: (user, problem) ->
@@ -76,4 +79,4 @@ Submits =
 
 if Meteor.isServer
     Meteor.startup ->
-        Submits.collection._ensureIndex({ "problem": 1, "user" : 1, time: 1});
+        Submits.collection._ensureIndex({ "user" : 1, "problem": 1, time: 1});

@@ -76,8 +76,8 @@ class RegionContestDownloader extends ContestDownloader
 
 
 Meteor.startup ->
-    (new RegionContestDownloader()).run()
-    (new ContestDownloader()).run()
+#    (new RegionContestDownloader()).run()
+#    (new ContestDownloader()).run()
 #    Tables.collection.insert({_id: "reg", levels: ["1А", "1Б"]})
 #    Tables.collection.insert({_id: "1c", levels: ["1В", "1Г"]})
 #    Tables.collection.insert({_id: "2", levels: ["2А", "2Б", "2В"]})

@@ -12,6 +12,13 @@ template(name='user')
             +each chocos
                 +chocos number=this
     h2
+        | Посылки по неделям
+    p.small
+        | Количество зачтенных посылок за неделю; 0.5 если посылки были, но ни одной зачтенной
+    table.solvedByWeek
+        +solvedByWeekHeader userList
+        +solvedByWeekLine userList
+    h2
         | Результаты
     +each tables
         +table

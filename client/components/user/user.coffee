@@ -16,3 +16,4 @@ Template.user.helpers
     lic40: ->
         @userList == "lic40"
         
+        

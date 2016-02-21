@@ -1,0 +1,11 @@
+template(name='solvedByWeekLine')
+    tr
+        +each weekSet 
+            +oneWeekSolved weekNumber=this userList=.. user=../..
+
+template(name='oneWeekSolved')
+    td(style="background-color: {{bgColor}};")
+        =weekSolved
+                
+                    
+    

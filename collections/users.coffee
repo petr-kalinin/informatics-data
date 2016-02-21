@@ -5,6 +5,13 @@ UsersCollection = new Mongo.Collection 'tableUsers'
 #   name    
 #   userList
 #   chocos
+#   solvedByWeek
+#      weekNo: submits
+
+@startDayForWeeks = 
+    "lic40": "2015-08-26"
+    "zaoch": "2015-08-29"
+@MSEC_IN_WEEK = 7 * 24 * 60 * 60 * 1000
 
 UsersCollection.helpers
     updateChocos: ->
@@ -19,6 +26,12 @@ UsersCollection.helpers
             res.push(calc.chocos())
         console.log @name, res
         Users.collection.update({_id: @_id}, {$set: {chocos: res}})
+        
+    updateSolvedByWeek: ->
+        res = calculateSubmitsByWeek this
+        console.log @name, res
+        Users.collection.update({_id: @_id}, {$set: {solvedByWeek: res}})
+        
 
 Users =
     findById: (id) ->

@@ -14,7 +14,8 @@ class AllSubmitDownloader
     needContinueFromSubmit: (runid) ->
         true
 
-    processSubmit: (uid, name, pid, runid, prob, date, outcome, childrenResults) ->
+    processSubmit: (uid, name, pid, runid, prob, date, outcome) ->
+        #console.log uid, name, pid, runid, prob, date, outcome
         res = @needContinueFromSubmit(runid)
         if (outcome == @AC) 
             outcome = "AC"
@@ -27,7 +28,7 @@ class AllSubmitDownloader
         @addedUsers[uid] = uid
         res
     
-    parseSubmits: (submitsTable, childrenResults) ->
+    parseSubmits: (submitsTable) ->
         submitsRows = submitsTable.split("<tr>")
         result = true
         wasSubmit = false
@@ -43,20 +44,19 @@ class AllSubmitDownloader
             prob = data[5]
             date = data[6]
             outcome = data[7].trim()
-            resultSubmit = @processSubmit(uid, name, pid, runid, prob, date, outcome, childrenResults)
+            resultSubmit = @processSubmit(uid, name, pid, runid, prob, date, outcome)
             result = result and resultSubmit
             wasSubmit = true
         return result and wasSubmit
     
     run: ->
         console.log "AllSubmitDownloader::run ", @userList, @limitPages
-        childrenResults = {}
         page = 0
         while true
             submitsUrl = @baseUrl(page)
             submits = syncDownload(submitsUrl)
             submits = submits["data"]["result"]["text"]
-            result = @parseSubmits(submits, childrenResults)
+            result = @parseSubmits(submits)
             if (page < @minPage) # always load at least minPage pages
                 result = true
             if not result
@@ -70,6 +70,7 @@ class AllSubmitDownloader
                 Results.updateResults(Users.findById(uid), t)
         for uid,tmp of @addedUsers
             Users.findById(uid).updateChocos()
+            Users.findById(uid).updateSolvedByWeek()
         console.log "Finish AllSubmitDownloader::run ", @userList, @limitPages
             
 class LastSubmitDownloader extends AllSubmitDownloader
@@ -84,10 +85,10 @@ class UntilIgnoredSubmitDownloader extends AllSubmitDownloader
 
     # Лицей 40
 lic40url = (page) ->
-        'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3696&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=' + page + '&action=getHTMLTable'
+        'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3696&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=100&with_comment=&page=' + page + '&action=getHTMLTable'
     # Заоч
 zaochUrl = (page) ->
-    'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3644&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=10&with_comment=&page=' + page + '&action=getHTMLTable'
+    'http://informatics.mccme.ru/moodle/ajax/ajax.php?problem_id=0&group_id=3644&user_id=0&lang_id=-1&status_id=-1&statement_id=0&objectName=submits&count=100&with_comment=&page=' + page + '&action=getHTMLTable'
 
     
 SyncedCron.add
@@ -105,8 +106,8 @@ SyncedCron.add
 #        return parser.text('every 10 seconds');
         return parser.text('every 5 minutes');
     job: -> 
-        (new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 2, 30)).run()
-        (new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 2, 30)).run()
+        (new UntilIgnoredSubmitDownloader(lic40url, 'lic40', 2, 4)).run()
+        (new UntilIgnoredSubmitDownloader(zaochUrl, 'zaoch', 2, 4)).run()
 
 SyncedCron.add
     name: 'loadTable-3',
@@ -117,19 +118,23 @@ SyncedCron.add
         (new AllSubmitDownloader(lic40url, 'lic40', 1, 1e9)).run()
         (new AllSubmitDownloader(zaochUrl, 'zaoch', 1, 1e9)).run()
 
-SyncedCron.start()
+#SyncedCron.start()
 
 Meteor.startup ->
+#    (new AllSubmitDownloader(lic40url, 'lic40', 1, 1e9)).run()
+#    (new AllSubmitDownloader(zaochUrl, 'zaoch', 1, 1e9)).run()
 #    for u in Users.findAll().fetch()
 #        u.updateChocos()
 #    console.log Submits.problemResult("208403", {_id: "1430"})
-#    (new AllSubmitDownloader(lic40url, 'lic40', 1, 4)).run()
-#    (new AllSubmitDownloader(zaochUrl, 'zaoch', 1e9)).run()
 
-#Meteor.startup ->
+Meteor.startup ->
+    users = Users.findAll().fetch()
+    for user in users
+        user.updateSolvedByWeek()
 #    Results.collection.remove {}
 #    tables = Tables.findAll().fetch()
 #    users = Users.findAll().fetch()
 #    for user in users
 #        for t in tables
 #            Results.updateResults(user, t)
+#        user.updateChocos()
