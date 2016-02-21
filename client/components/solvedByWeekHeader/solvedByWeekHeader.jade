@@ -1,7 +1,10 @@
 template(name='solvedByWeekHeader')
     tr
+        if name
+            td
+                | &nbsp;
         +each weekSet 
-            +oneWeekHeader weekNumber=this userList=..
+            +oneWeekHeader weekNumber=this userList=../userList
 
 template(name='oneWeekHeader')
     td

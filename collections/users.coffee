@@ -2,7 +2,7 @@ UsersCollection = new Mongo.Collection 'tableUsers'
 
 # fields
 #   _id
-#   name    
+#   name
 #   userList
 #   chocos
 #   solvedByWeek

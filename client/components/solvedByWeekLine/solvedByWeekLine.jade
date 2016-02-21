@@ -1,7 +1,11 @@
 template(name='solvedByWeekLine')
     tr
+        if name
+            td
+                a(href="/user/{{user._id}}")
+                    =user.name
         +each weekSet 
-            +oneWeekSolved weekNumber=this userList=.. user=../..
+            +oneWeekSolved weekNumber=this userList=../userList user=../..
 
 template(name='oneWeekSolved')
     td(style="background-color: {{bgColor}};")

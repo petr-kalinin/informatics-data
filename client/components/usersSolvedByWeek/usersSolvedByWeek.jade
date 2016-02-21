@@ -1,0 +1,7 @@
+template(name='usersSolvedByWeek')
+    h1
+        | Посылки по неделям
+    table.solvedByWeek
+        +solvedByWeekHeader userList=this name=true
+        +each users
+            +solvedByWeekLine userList=.. name=true user=this

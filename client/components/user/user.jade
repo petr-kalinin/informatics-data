@@ -14,10 +14,10 @@ template(name='user')
     h2
         | Посылки по неделям
     p.small
-        | Количество зачтенных посылок за неделю; 0.5 если посылки были, но ни одной зачтенной
+        | Количество зачтенных посылок за неделю; 0.5, если посылки были, но ни одной зачтенной
     table.solvedByWeek
-        +solvedByWeekHeader userList
-        +solvedByWeekLine userList
+        +solvedByWeekHeader userList=userList name=false
+        +solvedByWeekLine userList=userList user=this name=fale
     h2
         | Результаты
     +each tables
