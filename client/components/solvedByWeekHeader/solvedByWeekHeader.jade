@@ -3,6 +3,12 @@ template(name='solvedByWeekHeader')
         if name
             td
                 | &nbsp;
+            td
+                span(title="Рейтинг")
+                    | R
+            td
+                span(title="Активность")
+                    | A
         +each weekSet 
             +oneWeekHeader weekNumber=this userList=../userList
 

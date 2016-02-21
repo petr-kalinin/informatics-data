@@ -83,3 +83,4 @@ Meteor.startup ->
 #    Tables.collection.insert({_id: "2", levels: ["2А", "2Б", "2В"]})
 #    Tables.collection.insert({_id: "3", levels: ["3А", "3Б", "3В"]})
 #    Tables.collection.insert({_id: "4", levels: ["4А", "4Б", "4В"]})
+    Tables.collection.insert({_id: "5", levels: ["5А", "5Б", "5В"]})

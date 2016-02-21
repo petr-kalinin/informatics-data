@@ -70,7 +70,7 @@ class AllSubmitDownloader
                 Results.updateResults(Users.findById(uid), t)
         for uid,tmp of @addedUsers
             Users.findById(uid).updateChocos()
-            Users.findById(uid).updateSolvedByWeek()
+            Users.findById(uid).updateRatingEtc()
         console.log "Finish AllSubmitDownloader::run ", @userList, @limitPages
             
 class LastSubmitDownloader extends AllSubmitDownloader
@@ -128,9 +128,9 @@ Meteor.startup ->
 #    console.log Submits.problemResult("208403", {_id: "1430"})
 
 Meteor.startup ->
-#    users = Users.findAll().fetch()
-#    for user in users
-#        user.updateSolvedByWeek()
+    users = Users.findAll().fetch()
+    for user in users
+        user.updateRatingEtc()
 #    Results.collection.remove {}
 #    tables = Tables.findAll().fetch()
 #    users = Users.findAll().fetch()

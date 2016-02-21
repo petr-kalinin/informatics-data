@@ -27,21 +27,20 @@ UsersCollection.helpers
         console.log @name, res
         Users.collection.update({_id: @_id}, {$set: {chocos: res}})
         
-    updateSolvedByWeek: ->
-        res = calculateSubmitsByWeek this
+    updateRatingEtc: ->
+        res = calculateRatingEtc this
         console.log @name, res
-        Users.collection.update({_id: @_id}, {$set: {solvedByWeek: res}})
-        
+        Users.collection.update({_id: @_id}, {$set: res})
 
 Users =
     findById: (id) ->
         @collection.findOne _id: id
         
     findAll: ->
-        @collection.find {}
+        @collection.find {}, {sort: {ratingSort: -1}}
         
     findByList: (list) ->
-        @collection.find {userList: list}
+        @collection.find {userList: list}, {sort: {ratingSort: -1}}
         
     addUser: (id, name, userList) ->
         @collection.update({_id: id}, {$set: {_id: id, name: name, userList: userList}}, {upsert: true})
@@ -49,3 +48,9 @@ Users =
     collection: UsersCollection
 
 @Users = Users
+
+if Meteor.isServer
+    Meteor.startup ->
+        Users.collection._ensureIndex
+            userList: 1
+            ratingSort: 1

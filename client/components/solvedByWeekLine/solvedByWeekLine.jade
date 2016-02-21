@@ -4,6 +4,12 @@ template(name='solvedByWeekLine')
             td
                 a(href="/user/{{user._id}}")
                     =user.name
+            td
+                span(title="Рейтинг")
+                    =user.rating
+            td
+                span(title="Активность")
+                    =user.activity
         +each weekSet 
             +oneWeekSolved weekNumber=this userList=../userList user=../..
 
