@@ -3,7 +3,7 @@ template(name='solvedByWeekLine')
         if name
             td
                 a(href="/user/{{user._id}}")
-                    =user.name
+                    +userName user
             td
                 span(title="Рейтинг")
                     =user.rating

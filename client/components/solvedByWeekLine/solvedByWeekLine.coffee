@@ -4,9 +4,7 @@ Template.solvedByWeekLine.helpers
         now = new Date()
         nowWeek = Math.floor((now - thisStart) / MSEC_IN_WEEK)
         [0..nowWeek]
-        
-    userName: ->
-        @user.name
+
         
 Template.oneWeekSolved.helpers
     weekSolved: ->

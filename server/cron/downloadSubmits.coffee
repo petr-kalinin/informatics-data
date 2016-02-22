@@ -127,10 +127,10 @@ Meteor.startup ->
 #        u.updateChocos()
 #    console.log Submits.problemResult("208403", {_id: "1430"})
 
-Meteor.startup ->
-    users = Users.findAll().fetch()
-    for user in users
-        user.updateRatingEtc()
+#Meteor.startup ->
+#    users = Users.findAll().fetch()
+#    for user in users
+#        user.updateRatingEtc()
 #    Results.collection.remove {}
 #    tables = Tables.findAll().fetch()
 #    users = Users.findAll().fetch()
