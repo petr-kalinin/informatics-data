@@ -3,6 +3,9 @@ Template.tableRow.helpers
         user = Users.findById(@result.user)
         user.name
         
+    fullUser: ->
+        Users.findById(@result.user)
+        
     userId: ->
         @result.user
         
