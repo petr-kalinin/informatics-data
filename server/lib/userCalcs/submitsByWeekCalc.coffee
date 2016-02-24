@@ -26,23 +26,24 @@ levelVersion = (level) ->
 
 levelScore = (level) ->
     v = levelVersion(level)
-    res = Math.pow(2, v.major)
+    res = Math.pow(LEVEL_RATING_EXP, v.major)
+    minorExp = Math.pow(LEVEL_RATING_EXP, 0.25)
     if v.minor >= 'Б'
-        res *= 1.2
+        res *= minorExp
     if v.minor >= 'В'
-        res *= 1.2
+        res *= minorExp
     if v.minor >= 'Г'
-        res *= 1.2
+        res *= minorExp
     return res
 
 timeScore = (date) ->
     weeks = (new Date() - date)/MSEC_IN_WEEK
     #console.log weeks
-    return Math.pow(0.5, weeks)
+    return Math.pow(WEEK_ACTIVITY_EXP, weeks)
 
 activityScore = (level, date) ->
     v = levelVersion(level)
-    return v.major * timeScore(date)
+    return Math.sqrt(v.major) * timeScore(date)
 
 @calculateRatingEtc = (user) ->
     thisStart = new Date(startDayForWeeks[user.userList])
@@ -67,8 +68,9 @@ activityScore = (level, date) ->
             if !weekSolved[week]
                 weekSolved[week] = 0
             weekSolved[week]++
-            #console.log submitDate
-            #console.log s.problem, level, levelScore(level), timeScore(submitDate), rating, activity
+            #console.log submitDate, s.problem, level
+            #console.log levelScore(level), timeScore(submitDate), activityScore(level, submitDate)
+            #console.log "=", rating, activity
             rating += levelScore(level)
             activity += activityScore(level, submitDate)
     for week of wasSubmits
@@ -77,13 +79,13 @@ activityScore = (level, date) ->
     for w of weekSolved
         if w<0
             delete weekSolved[w]
-    activity = Math.floor(activity)
+    activity *= (1 - WEEK_ACTIVITY_EXP) # make this averaged
     return {
-        weekSolved: weekSolved
+        solvedByWeek: weekSolved
         rating: Math.floor(rating)
         activity: activity
-        ratingSort: if activity > 0 then rating else -1/rating
+        ratingSort: if activity > ACTIVITY_THRESHOLD then rating else -1/(rating+1)
     }
     
-#Meteor.startup ->
-#    Users.findById("207794").updateRatingEtc()
+Meteor.startup ->
+    Users.findById("82325").updateRatingEtc()

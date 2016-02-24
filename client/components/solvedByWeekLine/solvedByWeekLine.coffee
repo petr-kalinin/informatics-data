@@ -4,6 +4,11 @@ Template.solvedByWeekLine.helpers
         now = new Date()
         nowWeek = Math.floor((now - thisStart) / MSEC_IN_WEEK)
         [0..nowWeek]
+        
+    activity: ->
+        a = Math.floor(@user.activity / ACTIVITY_THRESHOLD) * ACTIVITY_THRESHOLD
+        s = a.toFixed(5)
+        s.replace(/\.?0+$/gm,"")
 
         
 Template.oneWeekSolved.helpers

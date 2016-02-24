@@ -10,6 +10,9 @@ Template.user.helpers
                     results: thisRes
         res
         
+    activity: ->
+        @activity.toFixed(2)
+        
     choco: ->
         @choco
         

@@ -9,7 +9,7 @@ template(name='solvedByWeekLine')
                     =user.rating
             td
                 span(title="Активность")
-                    =user.activity
+                    =activity
         +each weekSet 
             +oneWeekSolved weekNumber=this userList=../userList user=../..
 
