@@ -10,7 +10,7 @@ UsersCollection = new Mongo.Collection 'tableUsers'
 
 @startDayForWeeks = 
     "lic40": "2015-08-26"
-    "zaoch": "2015-08-29"
+    "zaoch": "2015-08-30"
 @MSEC_IN_WEEK = 7 * 24 * 60 * 60 * 1000
 
 UsersCollection.helpers

@@ -49,6 +49,7 @@ class RegionContestDownloader extends ContestDownloader
         '2013': ['6667', '6670']
         '2014': ['10372', '10376']
         '2015': ['14482', '14483']
+        '2016': ['18805', '18806']
     
     contestBaseUrl: 'http://informatics.mccme.ru/mod/statements/view.php?id='
         
@@ -78,9 +79,10 @@ class RegionContestDownloader extends ContestDownloader
 Meteor.startup ->
 #    (new RegionContestDownloader()).run()
 #    (new ContestDownloader()).run()
-#    Tables.collection.insert({_id: "reg", levels: ["1А", "1Б"]})
+#    Tables.collection.insert({_id: "1a", levels: ["1А", "1Б"]})
 #    Tables.collection.insert({_id: "1c", levels: ["1В", "1Г"]})
 #    Tables.collection.insert({_id: "2", levels: ["2А", "2Б", "2В"]})
 #    Tables.collection.insert({_id: "3", levels: ["3А", "3Б", "3В"]})
 #    Tables.collection.insert({_id: "4", levels: ["4А", "4Б", "4В"]})
-#    Tables.collection.insert({_id: "5", levels: ["5А", "5Б", "5В"]})
+#    Tables.collection.insert({_id: "5", levels: ["5А", "5Б", "5В"]})    
+#    Tables.collection.insert({_id: "6", levels: ["6А", "6Б", "6В"]})

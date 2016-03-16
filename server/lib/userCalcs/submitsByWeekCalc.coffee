@@ -87,5 +87,5 @@ activityScore = (level, date) ->
         ratingSort: if activity > ACTIVITY_THRESHOLD then rating else -1/(rating+1)
     }
     
-Meteor.startup ->
-    Users.findById("82325").updateRatingEtc()
+#Meteor.startup ->
+#    Users.findById("82325").updateRatingEtc()

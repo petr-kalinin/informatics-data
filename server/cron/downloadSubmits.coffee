@@ -120,17 +120,17 @@ SyncedCron.add
 
 SyncedCron.start()
 
-Meteor.startup ->
+#Meteor.startup ->
 #    (new AllSubmitDownloader(lic40url, 'lic40', 1, 1e9)).run()
 #    (new AllSubmitDownloader(zaochUrl, 'zaoch', 1, 1e9)).run()
 #    for u in Users.findAll().fetch()
 #        u.updateChocos()
 #    console.log Submits.problemResult("208403", {_id: "1430"})
 
-Meteor.startup ->
-    users = Users.findAll().fetch()
-    for user in users
-        user.updateRatingEtc()
+#Meteor.startup ->
+#    users = Users.findAll().fetch()
+#    for user in users
+#        user.updateRatingEtc()
 #    Results.collection.remove {}
 #    tables = Tables.findAll().fetch()
 #    users = Users.findAll().fetch()
