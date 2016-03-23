@@ -5,6 +5,9 @@ template(name='solvedByWeekLine')
                 a(href="/user/{{user._id}}")
                     +userName user
             td
+                span(title="Уровень")
+                    =user.level
+            td
                 span(title="Рейтинг")
                     =user.rating
             td

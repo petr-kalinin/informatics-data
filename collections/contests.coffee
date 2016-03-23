@@ -3,6 +3,9 @@ ContestsCollection = new Mongo.Collection 'contests'
 # fields
 #   _id
 #   problems[]
+#      _id
+#      letter
+#      name
 #   name
 #   order
 #   level

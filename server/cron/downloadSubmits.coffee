@@ -71,6 +71,7 @@ class AllSubmitDownloader
         for uid,tmp of @addedUsers
             Users.findById(uid).updateChocos()
             Users.findById(uid).updateRatingEtc()
+            Users.findById(uid).updateLevel()
         console.log "Finish AllSubmitDownloader::run ", @userList, @limitPages
             
 class LastSubmitDownloader extends AllSubmitDownloader
@@ -120,11 +121,11 @@ SyncedCron.add
 
 SyncedCron.start()
 
-#Meteor.startup ->
+Meteor.startup ->
 #    (new AllSubmitDownloader(lic40url, 'lic40', 1, 1e9)).run()
 #    (new AllSubmitDownloader(zaochUrl, 'zaoch', 1, 1e9)).run()
 #    for u in Users.findAll().fetch()
-#        u.updateChocos()
+#        u.updateLevel()
 #    console.log Submits.problemResult("208403", {_id: "1430"})
 
 #Meteor.startup ->

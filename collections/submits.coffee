@@ -16,6 +16,9 @@ Submits =
     findById: (id) ->
         @collection.findOne _id: id
         
+    findAcByUserAndProblem: (user, problem) ->
+        @collection.find({user: user, problem: problem._id, outcome: "AC"})
+
     findByUserAndProblem: (user, problem) ->
         @collection.find({user: user, problem: problem._id}, {sort: {time: 1}})
         
@@ -80,3 +83,7 @@ Submits =
 if Meteor.isServer
     Meteor.startup ->
         Submits.collection._ensureIndex({ "user" : 1, "problem": 1, time: 1});
+        
+if Meteor.isServer
+    Meteor.startup ->
+        Submits.collection._ensureIndex({ "user" : 1, "problem": 1, outcome: 1});

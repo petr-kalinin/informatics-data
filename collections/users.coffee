@@ -31,6 +31,10 @@ UsersCollection.helpers
         res = calculateRatingEtc this
         console.log @name, res
         Users.collection.update({_id: @_id}, {$set: res})
+        
+    updateLevel: ->
+        res = calculateLevel this
+        Users.collection.update({_id: @_id}, {$set: {level: res}})
 
 Users =
     findById: (id) ->
