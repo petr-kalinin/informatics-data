@@ -50,6 +50,7 @@ activityScore = (level, date) ->
     submits = Submits.findByUser(user._id).fetch()
     probSolved = {}
     weekSolved = {}
+    weekOk = {}
     wasSubmits = {}
     rating = 0
     activity = 0
@@ -61,9 +62,8 @@ activityScore = (level, date) ->
             continue
         submitDate = new Date(s.time)
         week = Math.floor((submitDate - thisStart) / MSEC_IN_WEEK)
-        if s.outcome != "AC"
-            wasSubmits[week] = true
-        else
+        wasSubmits[week] = true
+        if s.outcome == "AC"
             probSolved[s.problem] = true
             if !weekSolved[week]
                 weekSolved[week] = 0
@@ -73,15 +73,23 @@ activityScore = (level, date) ->
             #console.log "=", rating, activity
             rating += levelScore(level)
             activity += activityScore(level, submitDate)
+        else if s.outcome == "OK"
+            if !weekOk[week]
+                weekOk[week] = 0
+            weekOk[week]++
     for week of wasSubmits
         if !weekSolved[week]
             weekSolved[week] = 0.5
     for w of weekSolved
         if w<0
             delete weekSolved[w]
+    for w of weekOk
+        if w<0
+            delete weekOk[w]
     activity *= (1 - WEEK_ACTIVITY_EXP) # make this averaged
     return {
         solvedByWeek: weekSolved
+        okByWeek: weekOk
         rating: Math.floor(rating)
         activity: activity
         ratingSort: if activity > ACTIVITY_THRESHOLD then rating else -1/(rating+1)

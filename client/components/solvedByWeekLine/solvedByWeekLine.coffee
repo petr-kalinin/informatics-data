@@ -14,18 +14,23 @@ Template.solvedByWeekLine.helpers
 Template.oneWeekSolved.helpers
     weekSolved: ->
         num = @user.solvedByWeek[@weekNumber]
-        if num then num else ""
+        res = if num then num else ""
+        if @user.okByWeek
+            ok = @user.okByWeek[@weekNumber]
+            if ok
+                res = if res then res + "+" + ok else "0+" + ok
+        res
         
     bgColor: ->
         num = @user.solvedByWeek[@weekNumber]
         if !num
             "#ffffff"
         else if num<=2
-            "#ff8866"
+            "#ddffdd"
         else if num<=5
-            "#ffff00"
+            "#bbffbb"
         else if num<=8
-            "#44aa55"
+            "#88ff88"
         else 
             "#22ff22"
             
