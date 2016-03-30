@@ -93,6 +93,7 @@ activityScore = (level, date) ->
         rating: Math.floor(rating)
         activity: activity
         ratingSort: if activity > ACTIVITY_THRESHOLD then rating else -1/(rating+1)
+        active: if activity > ACTIVITY_THRESHOLD then 1 else 0
     }
     
 #Meteor.startup ->

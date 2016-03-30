@@ -4,6 +4,10 @@ Template.solvedByWeekHeader.helpers
         now = new Date()
         nowWeek = Math.floor((now - thisStart) / MSEC_IN_WEEK)
         [0..nowWeek]
+
+    admin: ->
+        isAdmin()
+
         
 Template.oneWeekHeader.helpers
     weekHeader: ->

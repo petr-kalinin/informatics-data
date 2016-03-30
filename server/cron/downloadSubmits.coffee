@@ -124,8 +124,9 @@ SyncedCron.start()
 Meteor.startup ->
 #    (new AllSubmitDownloader(lic40url, 'lic40', 1, 1e9)).run()
 #    (new AllSubmitDownloader(zaochUrl, 'zaoch', 1, 1e9)).run()
-#    for u in Users.findAll().fetch()
-#        u.updateLevel()
+    for u in Users.findAll().fetch()
+        u.updateRatingEtc()
+        u.updateLevel( )
 #    console.log Submits.problemResult("208403", {_id: "1430"})
 
 #Meteor.startup ->

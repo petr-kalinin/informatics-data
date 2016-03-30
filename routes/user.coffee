@@ -6,6 +6,7 @@ class @UserController extends ControllerWithTitle
         Meteor.subscribe 'contests'
         Meteor.subscribe 'tables'
         Meteor.subscribe 'resultsForUser', id
+        Meteor.subscribe 'meteorUser'
         
     data: ->
         id = this.params.id

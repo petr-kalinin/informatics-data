@@ -3,6 +3,10 @@ template(name='solvedByWeekHeader')
         if name
             td
                 | &nbsp;
+            if admin
+                td
+                    span(title="Базовый уровень")
+                        | БУ
             td
                 span(title="Уровень")
                     | У

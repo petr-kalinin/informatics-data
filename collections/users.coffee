@@ -29,22 +29,27 @@ UsersCollection.helpers
         
     updateRatingEtc: ->
         res = calculateRatingEtc this
-        console.log @name, res
         Users.collection.update({_id: @_id}, {$set: res})
         
     updateLevel: ->
         res = calculateLevel this
         Users.collection.update({_id: @_id}, {$set: {level: res}})
 
+    setBaseLevel: (level) ->
+        Users.collection.update({_id: @_id}, {$set: {baseLevel: level}})
+        if Meteor.isServer
+            @updateLevel()
+            @updateRatingEtc()
+
 Users =
     findById: (id) ->
         @collection.findOne _id: id
         
     findAll: ->
-        @collection.find {}, {sort: {ratingSort: -1}}
+        @collection.find {}, {sort: {active: 1, level: -1, ratingSort: -1}}
         
     findByList: (list) ->
-        @collection.find {userList: list}, {sort: {ratingSort: -1}}
+        @collection.find {userList: list}, {sort: {active: -1, level: -1, ratingSort: -1}}
         
     addUser: (id, name, userList) ->
         @collection.update({_id: id}, {$set: {_id: id, name: name, userList: userList}}, {upsert: true})
@@ -57,4 +62,6 @@ if Meteor.isServer
     Meteor.startup ->
         Users.collection._ensureIndex
             userList: 1
-            ratingSort: 1
+            active: -1
+            level: -1
+            ratingSort: -1

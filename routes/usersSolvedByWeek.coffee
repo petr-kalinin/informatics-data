@@ -3,6 +3,7 @@ class @UsersSolvedByWeekController extends ControllerWithTitle
     waitOn: ->
         userList = this.params.userList
         Meteor.subscribe 'users'
+        Meteor.subscribe 'meteorUser'
         
     data: ->
         userList = this.params.userList

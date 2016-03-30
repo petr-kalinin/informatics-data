@@ -29,3 +29,6 @@ dburles:collection-helpers
 percolate:synced-cron
 dandv:http-more
 meteorhacks:fast-render
+accounts-ui
+accounts-password
+mrt:accounts-vk

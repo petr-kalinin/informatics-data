@@ -6,11 +6,10 @@
             probNumber = 0
             probAc = 0
             for contest in contests
-                if contest.name[4] == "*"
-                    continue
                 for prob in contest.problems
                     ac = Submits.findAcByUserAndProblem(user._id, prob).count()
-                    probNumber++
+                    if contest.name[4] != "*"
+                        probNumber++
                     if ac
                         probAc++
             needProblem = probNumber
@@ -18,8 +17,10 @@
                 needProblem = probNumber * 0.5
             else if smallLevel == "Г"
                 needProblem = probNumber * 0.3333
-            if probAc < needProblem
+            if (probAc < needProblem) and ((!user.baseLevel) or (user.baseLevel < level))
+                console.log user.name, level
                 return level
+    return "inf"
     
 Meteor.startup ->
     Users.findById("87334").updateLevel()

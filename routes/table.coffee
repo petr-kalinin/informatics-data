@@ -7,6 +7,7 @@ class @TablePageController extends ControllerWithTitle
         Meteor.subscribe 'contests'
         Meteor.subscribe 'tables'
         Meteor.subscribe 'resultsForUserListTable', userList, tableId
+        Meteor.subscribe 'meteorUser'
         
     data: ->
         tableId = this.params.tableId

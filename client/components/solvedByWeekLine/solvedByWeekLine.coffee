@@ -10,6 +10,14 @@ Template.solvedByWeekLine.helpers
         s = a.toFixed(5)
         s.replace(/\.?0+$/gm,"")
 
+    admin: ->
+        isAdmin()
+        
+Template.solvedByWeekLine.events
+    "submit .baseLevel": (event) ->
+        Meteor.call("setBaseLevel", @user._id, event.target.newLevel.value)
+        event.preventDefault()
+        false
         
 Template.oneWeekSolved.helpers
     weekSolved: ->

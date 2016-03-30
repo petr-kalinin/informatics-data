@@ -4,6 +4,11 @@ template(name='solvedByWeekLine')
             td
                 a(href="/user/{{user._id}}")
                     +userName user
+            if admin
+                td
+                    span(title="Базовый уровень")
+                        form.baseLevel
+                            input(type="text",name="newLevel",value="{{user.baseLevel}}",size="3")
             td
                 span(title="Уровень")
                     =user.level

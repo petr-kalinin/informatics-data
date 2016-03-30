@@ -1,5 +1,7 @@
 template(name='application')
     .container-fluid
+        if user
+            +loginButtons
         +yield
     +footer
     //+githubRibbon
