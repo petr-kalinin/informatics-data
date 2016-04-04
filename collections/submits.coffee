@@ -28,7 +28,7 @@ Submits =
     DQconst: -10
         
     problemResult: (user, problem) ->
-        submits = @findByUserAndProblem user, problem
+        submits = @findByUserAndProblem(user, problem).fetch()
         attempts = 0
         success = 0
         accepted = 0
