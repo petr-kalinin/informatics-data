@@ -1,4 +1,4 @@
-@calculateLevel = (user) ->
+@calculateLevel = (user, lastDate) ->
     for bigLevel in [1..10]
         for smallLevel in ["А", "Б", "В", "Г"]
             level = bigLevel + smallLevel
@@ -7,10 +7,15 @@
             probAc = 0
             for contest in contests
                 for prob in contest.problems
-                    ac = Submits.findAcByUserAndProblem(user._id, prob).count()
+                    ac = Submits.findAcByUserAndProblem(user._id, prob).fetch()
+                    foundAc = false
+                    for s in ac
+                        submitDate = new Date(s.time)
+                        if submitDate < lastDate
+                            foundAc = true
                     if contest.name[4] != "*"
                         probNumber++
-                    if ac
+                    if foundAc
                         probAc++
             needProblem = probNumber
             if smallLevel == "В"
@@ -23,4 +28,6 @@
     return "inf"
     
 Meteor.startup ->
-    Users.findById("87334").updateLevel()
+    u = Users.findById("87334")
+    u.updateLevel()
+    console.log u.level, u.startLevel

@@ -9,6 +9,9 @@ template(name='solvedByWeekLine')
                     span(title="Базовый уровень")
                         form.baseLevel
                             input(type="text",name="newLevel",value="{{user.baseLevel}}",size="3")
+                td
+                    span(title="Уровень на старте полугодия")
+                        =user.startLevel
             td
                 span(title="Уровень")
                     =user.level

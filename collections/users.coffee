@@ -12,6 +12,7 @@ UsersCollection = new Mongo.Collection 'tableUsers'
     "lic40": "2015-08-26"
     "zaoch": "2015-08-30"
 @MSEC_IN_WEEK = 7 * 24 * 60 * 60 * 1000
+@SEMESTER_START = "2016-01-01"
 
 UsersCollection.helpers
     updateChocos: ->
@@ -32,8 +33,9 @@ UsersCollection.helpers
         Users.collection.update({_id: @_id}, {$set: res})
         
     updateLevel: ->
-        res = calculateLevel this
-        Users.collection.update({_id: @_id}, {$set: {level: res}})
+        level = calculateLevel this, new Date("2100-01-01")
+        startLevel = calculateLevel this, new Date(SEMESTER_START)
+        Users.collection.update({_id: @_id}, {$set: {level: level, startLevel : startLevel}})
 
     setBaseLevel: (level) ->
         Users.collection.update({_id: @_id}, {$set: {baseLevel: level}})
