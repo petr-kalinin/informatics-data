@@ -1,0 +1,7 @@
+template(name='overallTable')
+    h1
+        | Общая таблица
+    table.solvedByWeek
+        +overallHeader userList=this name=true
+        +each users
+            +overallLine userList=.. user=this name=true

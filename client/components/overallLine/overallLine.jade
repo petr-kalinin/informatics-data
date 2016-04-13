@@ -1,0 +1,12 @@
+template(name='overallLine')
+    tr
+        +userLine
+        +each tables
+            td.border
+            +each levels
+                +overallResult table=.. level=this user=../../user
+                
+                    
+template(name='overallResult')
+    td(style="background-color: {{bgColor}};")
+        =result

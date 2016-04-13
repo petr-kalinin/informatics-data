@@ -1,24 +1,6 @@
 template(name='solvedByWeekHeader')
     tr
-        if name
-            td
-                | &nbsp;
-            if admin
-                td
-                    span(title="Базовый уровень")
-                        | БУ
-                td
-                    span(title="Уровень на начало полугодия")
-                        | УП
-            td
-                span(title="Уровень")
-                    | У
-            td
-                span(title="Рейтинг")
-                    | Р
-            td
-                span(title="Активность")
-                    | A
+        +userHeader
         +each weekSet 
             +oneWeekHeader weekNumber=this userList=../userList
 

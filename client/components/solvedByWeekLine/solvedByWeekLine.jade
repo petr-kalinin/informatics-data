@@ -1,26 +1,6 @@
 template(name='solvedByWeekLine')
     tr
-        if name
-            td
-                a(href="/user/{{user._id}}")
-                    +userName user
-            if admin
-                td
-                    span(title="Базовый уровень")
-                        form.baseLevel
-                            input(type="text",name="newLevel",value="{{user.baseLevel}}",size="3")
-                td
-                    span(title="Уровень на старте полугодия")
-                        =user.startLevel
-            td
-                span(title="Уровень")
-                    =user.level
-            td
-                span(title="Рейтинг")
-                    =user.rating
-            td
-                span(title="Активность")
-                    =activity
+        +userLine
         +each weekSet 
             +oneWeekSolved weekNumber=this userList=../userList user=../..
 
