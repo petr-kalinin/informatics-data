@@ -6,6 +6,10 @@ Template.okSubmits.helpers
         Users.findById(@user).name
         
     needSubmit: ->
+        START_DATE = "2016-04-01"
+        startDate = new Date(START_DATE)
+        if new Date(@time) < startDate
+            return false
         for c in Contests.findAll().fetch()
             for p in c.problems
                 if p._id == @problem
